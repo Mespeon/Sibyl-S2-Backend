@@ -10,8 +10,6 @@ class UserAccount(models.Model):
 
     def __str__(self):
         return self.username
-        return password
-        return first_name
-        return last_name
-
-# Create your models here.
+        return self.password
+        return self.first_name
+        return self.last_name
