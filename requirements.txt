@@ -1,2 +1,6 @@
 Django~=2.0.6
 django-cors-headers
+scikit-learn
+numpy
+scipy
+nltk
