@@ -10,21 +10,46 @@
 
 <body>
   <div id="wrapper">
-    <div id="header--options-page">
-      <h1>Developer Options</h1>
-      <span class="header--text">Want to try something? Here's where you do it.</span>
-    </div>
-
     <div id="content--options-page">
       <div class="content--option-container">
-        <h1 class="content--option-header">Test Sentiment Analysis</h1>
-        <form action="analyze" target="_blank" method="POST" id="form-analyze-single" name="form-analyze-single">
+        <h1 class="content--option-header">Test Sentiment Analysis (Lexicon Matching)</h1>
+        <form action="analyze/mode=lexicon" target="_blank" method="POST" id="form-analyze-single" name="form-analyze-single">
           <label>Enter text</label><br/>
-          <textarea name="name" id="ta--comment" name="ta--comment" form="form-analyze-single" maxlength="100" cols="30" rows="10"></textarea><br/>
+          <textarea id="comment" name="comment" form="form-analyze-single" maxlength="100" cols="30" rows="10"></textarea><br/>
           <input type="submit" id="submit--analyze-single" name="submit--analyze-single" value="Submit">
         </form>
       </div>
     </div>
   </div>
+
+  <div id="content--results">
+    <span id="result">If you see this text after form submission, <br/>something wrong happened in the JSON parsing.</span>
+  </div>
+
+  <script>
+    var commentArea = document.querySelector('#comment');
+
+    $(function() {
+      $('#form-analyze-single').submit(function() {
+          $.ajax({
+              type: 'POST',
+              url: 'analyze/mode=lexicon',
+              data: {comment: commentArea.value},
+              error: function()
+              {
+                 alert("Request Failed");
+              },
+              success: function(response)
+              {
+                 //alert('Request Sent');
+                 console.log(commentArea.value);
+                 console.log(response.result);
+                 $("#result").html(response.result);
+              } // this was missing
+          });
+          return false;
+      })
+    });
+  </script>
 </body>
 </html>

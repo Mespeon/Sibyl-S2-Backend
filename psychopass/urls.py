@@ -4,5 +4,6 @@ from . import views
 urlpatterns = [
     path(r'', views.index, name='index'),
     path(r'test', views.testView, name='testView'),
-    path(r'analyze', views.analyzeThis, name='analyzeThis'),
+    path(r'analyze/mode=lexicon', views.analyzeLexiconMatching, name='analyzeLexiconMatching'),
+    path(r'analyze/mode=classifier', views.analyzeClassifier, name='analyzeClassifier'),
 ]
