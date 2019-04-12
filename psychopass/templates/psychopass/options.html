@@ -4,15 +4,35 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-  <link rel="stylesheet" href="/css/options.css">
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+
+    #wrapper {
+      width: 30%;
+      margin: auto;
+      margin-top: calc(0.5rem + 10vmin);
+      border: 1px solid #eee;
+      border-radius: 5px;
+      padding: calc(0.5rem + 2vmin);
+      box-shadow: 0 0px 5px rgba(100,100,100,0.10), 0 0px 5px rgba(100,100,100,0.10);
+    }
+
+    h1 {
+      font-family: sans-serif;
+      color: #00a99d;
+    }
+  </style>
 </head>
 
 <body>
   <div id="wrapper">
     <div id="content--options-page">
       <div class="content--option-container">
-        <h1 class="content--option-header">Test Sentiment Analysis (Lexicon Matching)</h1>
+        <h1 class="content--option-header">Test Sentiment Analysis<br/>(Lexicon Matching)</h1>
         <form action="analyze/mode=lexicon" target="_blank" method="POST" id="form-analyze-single" name="form-analyze-single">
           <label>Enter text</label><br/>
           <textarea id="comment" name="comment" form="form-analyze-single" maxlength="100" cols="30" rows="10"></textarea><br/>
@@ -20,10 +40,10 @@
         </form>
       </div>
     </div>
-  </div>
 
-  <div id="content--results">
-    <span id="result">If you see this text after form submission, <br/>something wrong happened in the JSON parsing.</span>
+    <div id="content--results">
+      <span id="result">If you see this text after form submission, <br/>something wrong happened in the JSON parsing.</span>
+    </div>
   </div>
 
   <script>
