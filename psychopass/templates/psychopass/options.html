@@ -31,7 +31,7 @@
 <body>
   <div id="wrapper">
     <div id="content--options-page">
-      <div class="content--option-container">
+      <!-- <div class="content--option-container">
         <h1 class="content--option-header">Test Sentiment Analysis<br/>(Lexicon Matching)</h1>
         <form action="analyze/mode=lexicon" target="_blank" method="POST" id="form-analyze-single" name="form-analyze-single">
           <label>Enter text</label><br/>
@@ -39,34 +39,76 @@
           <input type="submit" id="submit--analyze-single" name="submit--analyze-single" value="Submit">
         </form>
       </div>
+      <div id="content--results-lexicon">
+        <span id="result-lexicon">If you see this text after form submission, <br/>something wrong happened in the JSON parsing.</span>
+      </div> -->
+
+      <div class="content--option-container">
+        <h1 class="content--option-header">Test Sentiment Analysis<br/>(Classifier)</h1>
+        <form action="analyze/mode=classifier" target="_blank" method="POST" id="form-analyze-classifier" name="form-analyze-classifier">
+          <label>Enter text</label><br/>
+          <textarea id="classifyComment" name="classifyComment" form="form-analyze-classifier" maxlength="100" cols="30" rows="10"></textarea><br/>
+          <input type="submit" id="submit--classify-single" name="submit--classify-single" value="Submit">
+        </form>
+      </div>
     </div>
 
-    <div id="content--results">
-      <span id="result">If you see this text after form submission, <br/>something wrong happened in the JSON parsing.</span>
+    <div id="content--results-classifier">
+      <span id="result-classifier">If you see this text after form submission, <br/>something wrong happened in the JSON parsing.</span>
     </div>
   </div>
 
   <script>
     var commentArea = document.querySelector('#comment');
+    var commentAreaClassifier = document.querySelector('#classifyComment');
 
+    // FOR LEXICON MATCHING
+    // $(function() {
+    //   $('#form-analyze-single').submit(function() {
+    //       $.ajax({
+    //           type: 'POST',
+    //           url: 'analyze/mode=lexicon',
+    //           data: {comment: commentArea.value},
+    //           error: function()
+    //           {
+    //              alert("Request Failed");
+    //           },
+    //           success: function(response)
+    //           {
+    //              //alert('Request Sent');
+    //              console.log(commentArea.value);
+    //              console.log(response.result);
+    //              $("#result").html(response.result);
+    //           } // this was missing
+    //       });
+    //       return false;
+    //   })
+    // });
+
+    // FOR CLASSIFIER
     $(function() {
-      $('#form-analyze-single').submit(function() {
+      $(document).ajaxStart(function() {
+        $('#result-classifier').html('This may take a while. Please wait...');
+      });
+
+      $('#form-analyze-classifier').submit(function() {
           $.ajax({
               type: 'POST',
-              url: 'analyze/mode=lexicon',
-              data: {comment: commentArea.value},
+              url: 'analyze/mode=classifier',
+              data: {comment: commentAreaClassifier.value},
               error: function()
               {
-                 alert("Request Failed");
+                 //alert("Request Failed");
+                 $('#result-classifier').html('Request failed.')
               },
               success: function(response)
               {
                  //alert('Request Sent');
-                 console.log(commentArea.value);
+                 console.log(commentAreaClassifier.value);
                  console.log(response.result);
-                 $("#result").html(response.result);
+                 $("#result-classifier").html(response.result);
               } // this was missing
-          });
+          })
           return false;
       })
     });

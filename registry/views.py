@@ -13,6 +13,10 @@ def index(request):
     return HttpResponse(crossScriptReferencing)
 
 @csrf_exempt
+def login(request):
+    return HttpResponse('Login reached. How may I help you?')
+
+@csrf_exempt
 def register(request):
     response = HttpResponse()
     hasErrors = False
