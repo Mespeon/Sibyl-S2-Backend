@@ -1,3 +1,4 @@
+.gitignore
 *.pyc
 *~
 __pycache__
@@ -5,3 +6,4 @@ sibyl
 db.sqlite3
 /static
 .DS_Store
+/documents/featureset_3k.pickle
