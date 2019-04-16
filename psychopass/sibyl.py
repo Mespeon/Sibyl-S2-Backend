@@ -12,7 +12,7 @@ from statistics import mode
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 document_pickle =  os.path.join(BASE_DIR, 'documents/documents.pickle')
 word_feature_pickle =  os.path.join(BASE_DIR, 'documents/word_features_5k.pickle')
-featureset_pickle =  os.path.join(BASE_DIR, 'documents/featureset_3k.pickle')
+featureset_pickle =  os.path.join(BASE_DIR, 'documents/featureset_1_7.pickle')
 nbclassifier_pickle =  os.path.join(BASE_DIR, 'classifiers/sibyl-naive-bayes.pickle')
 
 # Classifier Voter
@@ -44,7 +44,7 @@ def beginClassification(text):
     document_f = open(document_pickle, 'rb')
     documents = pickle.load(document_f)
     document_f.close()
-    print('Dataset opened.\n\n')
+    print('Dataset opened.\n')
 
     #Unpickle word features
     #Reset to 10K after testing with a 3K set
@@ -52,7 +52,7 @@ def beginClassification(text):
     features_f = open(word_feature_pickle, 'rb')
     word_features = pickle.load(features_f)
     features_f.close()
-    print('Word features opened.\n\n')
+    print('Word features opened.\n')
 
     # Feature extraction
     def find_features(document):
@@ -78,14 +78,14 @@ def beginClassification(text):
     featuresets = pickle.load(featuresets_f)
     featuresets_f.close()
     random.shuffle(featuresets)
-    print('Featureset opened.\n\n')
+    print('Featureset opened.\n')
 
     #Testing and training sets
     #Reset to 10K after testing with a 3K set
-    print('Training...\n\n')
+    print('Training...')
     training_set = featuresets[:10000]
     testing_set = featuresets[10000:]
-    print('Featureset length: %d \n\n' % len(featuresets))
+    print('Featureset length: %d \n' % len(featuresets))
 
     #Unpickle classifier
     #Reset after testing with a 3K set
@@ -93,7 +93,7 @@ def beginClassification(text):
     classifier_f = open(nbclassifier_pickle, 'rb')
     classifier = pickle.load(classifier_f)
     classifier_f.close()
-    print('Classifier opened.\n\n')
+    print('Classifier opened.\n')
 
     print('Classifying...')
     voted_classifier = VoteClassifier(classifier)

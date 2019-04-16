@@ -47,7 +47,14 @@ def analyzeClassifier(request):
         # ]
 
         comment = request.POST.get('comment')           # get the comment (this is passed using an AJAX request)
-        analysis = sibyl.sentiment_single(comment)      # pass the comment to the single classifier
+        if comment == '':
+            classification = 'There is nothing to classify here.'
+        else:
+            analysis = sibyl.sentiment_single(comment)      # pass the comment to the single classifier
+            if analysis[0] == 'pos':
+                classification = 'The phrase showed a positive polarity.'
+            else:
+                classification = 'The phrase showed a negative polarity.'
 
         # Format the classification (pos/neg)
         # for result in analysis:
@@ -58,10 +65,5 @@ def analyzeClassifier(request):
 
         # create a JSON response object using the analysis results
         # and return it back to the page
-        if analysis[0] == 'pos':
-            classification = 'The phrase showed a positive polarity.'
-        else:
-            classification = 'The phrase showed a negative polarity.'
-
         response = JsonResponse({'result': classification})
         return response
