@@ -4,5 +4,5 @@
 ## Testing and Installation
 Please refer to this (https://github.com/Mespeon/Sibyl-S2) for testing and installation procedures.
 
-## There is no linked featureset in this repository.
-A manually updated featureset is used in this repository.
+### A smaller featureset is linked in this project.
+Due to file size restrictions, a smaller featureset is committed in this repository.
