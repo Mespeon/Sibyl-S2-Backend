@@ -31,6 +31,24 @@
 <body>
   <div id="wrapper">
     <div id="content--options-page">
+      <span id="test-sql-results">Senpai, notice me.</span><br/>
+      <a href="" id="test-sql-link">Test direct SQL execution from a frontend request</a>
+
+      <div style="margin-top: 50px;">
+        <input id="table-name" name="table-name">
+        <button id="pass-table-name">Submit this table name</button><br/>
+        <span id="table-name-display"></span>
+      </div>
+
+      <div style="margin-top: 50px;">
+        <button id="pass-4-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 4-column sample</button>
+        <button id="pass-5-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 5-column sample</button>
+        <button id="pass-6-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 6-column sample</button>
+        <button id="pass-7-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 7-column sample</button>
+        <button id="pass-8-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 8-column sample</button>
+        <button id="pass-9-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 9-column sample</button>
+        <button id="pass-24-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 24-column sample</button>
+      </div>
       <!-- <div class="content--option-container">
         <h1 class="content--option-header">Test Sentiment Analysis<br/>(Lexicon Matching)</h1>
         <form action="analyze/mode=lexicon" target="_blank" method="POST" id="form-analyze-single" name="form-analyze-single">
@@ -43,7 +61,7 @@
         <span id="result-lexicon">If you see this text after form submission, <br/>something wrong happened in the JSON parsing.</span>
       </div> -->
 
-      <div class="content--option-container">
+      <!-- <div class="content--option-container">
         <h1 class="content--option-header">Test Sentiment Analysis<br/>(Classifier)</h1>
         <form action="analyze/mode=classifier" target="_blank" method="POST" id="form-analyze-classifier" name="form-analyze-classifier">
           <label>Enter text</label><br/>
@@ -55,10 +73,105 @@
 
     <div id="content--results-classifier">
       <span id="result-classifier">If you see this text after form submission, <br/>something wrong happened in the JSON parsing.</span>
-    </div>
+    </div> -->
   </div>
 
   <script>
+    var $input = document.querySelector('#table-name');
+    // var $four = document.querySelector('#pass-4-sample-columns');
+    // var $five = document.querySelector('#pass-5-sample-columns');
+    // var $six = document.querySelector('#pass-6-sample-columns');
+    // var $seven = document.querySelector('#pass-7-sample-columns');
+    // var $eight = document.querySelector('#pass-8-sample-columns');
+    // var $nine = document.querySelector('#pass-9-sample-columns');
+    // var $twentyfour = document.querySelector('#pass-24-sample-columns');
+
+    $(function() {
+      $(document).ajaxStart(function() {
+          $('#test-sql-results').html('Process running. Please wait.');
+      });
+
+      // Submit a sample name to a creator endpoint
+      $('#pass-table-name').click(function() {
+        console.log($input.value);
+        $.ajax({
+          type: 'POST',
+          url: 'create',
+          data: {name: $input.value},
+          error: function(response) { console.log(response); },
+          success: function(response) {
+            console.log(response);
+            $('#test-sql-results').html(response.status);
+            $('#table-name-display').html(response.name);
+          }
+        });
+        return false;
+      });
+
+      // Submit sample column arguments to a creator endpoint
+      // Submit the table name specified in a text box as well.
+      $('#pass-4-sample-columns').click(function() {
+        console.log('Table name: ', $input.value);
+        console.log('Submitting 4 columns.');
+
+        // Value assignment
+        tableName = $input.value;
+        fields = ['text-firstName', 'textarea-comment', 'radio-group-scaling', 'select-willRecommend'];
+        jFields = JSON.stringify(fields); // JSON.stringify converts the array into a JSON string
+        console.log(fields);
+
+        // BEGIN ASYNC OP
+        $.ajax({
+          type: 'POST',
+          url: 'create',
+          data: {tableName: tableName, fields: jFields},
+          error: function(response) { console.log(response); },
+          success: function(response) {
+            console.log(response);
+          }
+        });
+        return false;
+      });
+
+      $('#pass-5-sample-columns').click(function() {
+        console.log('Table name: ', $input.value);
+        console.log('Submitting 5 columns.');
+
+        // Value assignment
+        tableName = $input.value;
+        fields = ['text-firstName', 'text-lastName', 'textarea-comment', 'radio-group-scale-score', 'select-isAwesome'];
+        jFields = JSON.stringify(fields); // JSON.stringify converts the array into a JSON string
+        console.log(fields);
+
+        // BEGIN ASYNC OP
+        $.ajax({
+          type: 'POST',
+          url: 'create',
+          data: {tableName: tableName, fields: jFields},
+          error: function(response) { console.log(response); },
+          success: function(response) {
+            console.log(response);
+          }
+        });
+        return false;
+      });
+
+      $('#test-sql-link').click(function() {
+        $.ajax({
+          type: 'GET',
+          url: 'test-sql',
+          error: function(response) { $('#test-sql-results').html(response.status); },
+          success: function(response) {
+            console.log(response.status);
+            $('#test-sql-results').html(response.status);
+          }
+        });
+        return false;
+      })
+    });
+  </script>
+
+  <!-- <script>
     var commentArea = document.querySelector('#comment');
     var commentAreaClassifier = document.querySelector('#classifyComment');
 
@@ -112,6 +225,6 @@
           return false;
       })
     });
-  </script>
+  </script> -->
 </body>
 </html>
