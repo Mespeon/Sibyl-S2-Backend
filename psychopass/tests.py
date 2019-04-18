@@ -7,7 +7,7 @@ import string
 def custom_sql():
     with connection.cursor() as cursor:
         try:
-            sql = "DROP TABLE IF EXISTS 'testTable'"
+            sql = "DROP TABLE IF EXISTS 'nanahira'"
             cursor.execute(sql)
             message = 'Table dropped.'
         except Exception as ex:
@@ -99,17 +99,23 @@ def custom_alter_query_multi(tableName, *args):
 
         #' '.join([prefix_text, str(store_code)])
 
-def custom_select_query():
+def custom_select_query(table):
     with connection.cursor() as cursor:
         try:
-            sql = "SELECT * FROM testTable"
+            sql = "SELECT * FROM '%s' WHERE rowId = 1" % table
             cursor.execute(sql)
             row = cursor.fetchall()
 
-            return row
+            if len(row) == 0:
+                print('No rows found.')
+            else:
+                return row
+
         except Exception as ex:
             return ex
 
 # PARAMS
 # custom_create_query(table_name, field01, field02, field03 ... field0n)
-print(custom_create_query('Nanahira', 'text-firstName', 'text-lastName', 'select-gender', 'textarea-comment'))
+#print(custom_create_query('Nanahira', 'text-firstName', 'text-lastName', 'select-gender', 'textarea-comment'))
+
+print(custom_select_query('nanahira'))

@@ -36,18 +36,13 @@
 
       <div style="margin-top: 50px;">
         <input id="table-name" name="table-name">
-        <button id="pass-table-name">Submit this table name</button><br/>
         <span id="table-name-display"></span>
       </div>
 
       <div style="margin-top: 50px;">
         <button id="pass-4-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 4-column sample</button>
         <button id="pass-5-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 5-column sample</button>
-        <button id="pass-6-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 6-column sample</button>
-        <button id="pass-7-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 7-column sample</button>
-        <button id="pass-8-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 8-column sample</button>
-        <button id="pass-9-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 9-column sample</button>
-        <button id="pass-24-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 24-column sample</button>
+        <button id="pass-11-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 11-column sample</button>
       </div>
       <!-- <div class="content--option-container">
         <h1 class="content--option-header">Test Sentiment Analysis<br/>(Lexicon Matching)</h1>
@@ -91,23 +86,6 @@
           $('#test-sql-results').html('Process running. Please wait.');
       });
 
-      // Submit a sample name to a creator endpoint
-      $('#pass-table-name').click(function() {
-        console.log($input.value);
-        $.ajax({
-          type: 'POST',
-          url: 'create',
-          data: {name: $input.value},
-          error: function(response) { console.log(response); },
-          success: function(response) {
-            console.log(response);
-            $('#test-sql-results').html(response.status);
-            $('#table-name-display').html(response.name);
-          }
-        });
-        return false;
-      });
-
       // Submit sample column arguments to a creator endpoint
       // Submit the table name specified in a text box as well.
       $('#pass-4-sample-columns').click(function() {
@@ -140,6 +118,29 @@
         // Value assignment
         tableName = $input.value;
         fields = ['text-firstName', 'text-lastName', 'textarea-comment', 'radio-group-scale-score', 'select-isAwesome'];
+        jFields = JSON.stringify(fields); // JSON.stringify converts the array into a JSON string
+        console.log(fields);
+
+        // BEGIN ASYNC OP
+        $.ajax({
+          type: 'POST',
+          url: 'create',
+          data: {tableName: tableName, fields: jFields},
+          error: function(response) { console.log(response); },
+          success: function(response) {
+            console.log(response);
+          }
+        });
+        return false;
+      });
+
+      $('#pass-11-sample-columns').click(function() {
+        console.log('Table name: ', $input.value);
+        console.log('Submitting 11 columns.');
+
+        // Value assignment
+        tableName = $input.value;
+        fields = ['text-name', 'button-submit', 'textarea-comment', 'radio-group-scale-score', 'select-isAwesome', 'date-awesomenessDate', 'checkbox-group-nanahira-fan-club', 'hidden-findMickey', 'number-cellphone'];
         jFields = JSON.stringify(fields); // JSON.stringify converts the array into a JSON string
         console.log(fields);
 
