@@ -14,7 +14,6 @@
     #wrapper {
       width: 30%;
       margin: auto;
-      margin-top: calc(0.5rem + 10vmin);
       border: 1px solid #eee;
       border-radius: 5px;
       padding: calc(0.5rem + 2vmin);
@@ -32,8 +31,9 @@
   <div id="wrapper">
     <div id="content--options-page">
       <span id="test-sql-results">Senpai, notice me.</span><br/>
-      <a href="" id="test-sql-link">Test direct SQL execution from a frontend request</a>
+      <!-- <a href="" id="test-sql-link">Test direct SQL execution from a frontend request</a> -->
 
+      <h1>Create a form automagically</h1>
       <div style="margin-top: 50px;">
         <input id="table-name" name="table-name">
         <span id="table-name-display"></span>
@@ -44,6 +44,39 @@
         <button id="pass-5-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 5-column sample</button>
         <button id="pass-11-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 11-column sample</button>
       </div>
+
+      <h1>Sample Form</h1>
+      <form id="sampleForm" name="sampleForm" action="write" method="POST">
+        <div>
+          <label>Form ID is in a hidden input.</label>
+          <input type="hidden" id="tableId" name="tableId" value="donutmedia">
+        </div>
+        &nbsp;
+        <div>
+          <label>First Name</label>
+          <input type="text" id="text-firstName" name="text-firstName">
+          <br/><br/>
+          <label>Last Name</label>
+          <input type="text" id="text-lastName" name="text-lastName">
+          <br/><br/>
+          <label>Comment something</label><br/>
+          <textarea id="textarea-comment" name="textarea-comment" form="sampleForm" maxlength="100" cols="30" rows="10"></textarea>
+          <br/><br/>
+          <label>Awesomeness Scale</label><br/>
+          <input type="radio" id="option-5" name="awesomeness-scale" value="excellent" checked> 5 - Excellent<br/>
+          <input type="radio" id="option-4" name="awesomeness-scale" value="vsatisfactory"> 4 - Very Satisfactory<br/>
+          <input type="radio" id="option-3" name="awesomeness-scale" value="satisfactory"> 3 - Satisfactory<br/>
+          <input type="radio" id="option-2" name="awesomeness-scale" value="unsatisfactory"> 2 - Unsatisfactory<br/>
+          <input type="radio" id="option-1" name="awesomeness-scale" value="improvement"> 1 - Needs Improvement<br/>
+          <br/>
+          <label>Will you recommend?</label>
+          <select id="select-isAwesome" name="select-isAwesome">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <input type="submit" id="submit" name="submit" value="Submit">
+      </form>
       <!-- <div class="content--option-container">
         <h1 class="content--option-header">Test Sentiment Analysis<br/>(Lexicon Matching)</h1>
         <form action="analyze/mode=lexicon" target="_blank" method="POST" id="form-analyze-single" name="form-analyze-single">
@@ -73,18 +106,37 @@
 
   <script>
     var $input = document.querySelector('#table-name');
-    // var $four = document.querySelector('#pass-4-sample-columns');
-    // var $five = document.querySelector('#pass-5-sample-columns');
-    // var $six = document.querySelector('#pass-6-sample-columns');
-    // var $seven = document.querySelector('#pass-7-sample-columns');
-    // var $eight = document.querySelector('#pass-8-sample-columns');
-    // var $nine = document.querySelector('#pass-9-sample-columns');
-    // var $twentyfour = document.querySelector('#pass-24-sample-columns');
 
     $(function() {
       $(document).ajaxStart(function() {
           $('#test-sql-results').html('Process running. Please wait.');
       });
+
+      $(document).ajaxStop(function() {
+        $('#test-sql-results').html('Process completed.');
+      });
+
+      $('#sampleForm').submit(function() {
+        form = $(this);
+
+        $.ajax({
+            type: 'POST',
+            url: 'write',
+            data: form.serialize(),
+            error: function()
+            {
+               alert("Request Failed");
+            },
+            success: function(response)
+            {
+               //alert('Request Sent');
+               console.log(response)
+            } // this was missing
+        });
+        return false;
+      });
+
+      //$('#sampleForm').ajaxForm({url: 'write', type: 'post'});
 
       // Submit sample column arguments to a creator endpoint
       // Submit the table name specified in a text box as well.
@@ -157,18 +209,18 @@
         return false;
       });
 
-      $('#test-sql-link').click(function() {
-        $.ajax({
-          type: 'GET',
-          url: 'test-sql',
-          error: function(response) { $('#test-sql-results').html(response.status); },
-          success: function(response) {
-            console.log(response.status);
-            $('#test-sql-results').html(response.status);
-          }
-        });
-        return false;
-      })
+      // $('#test-sql-link').click(function() {
+      //   $.ajax({
+      //     type: 'GET',
+      //     url: 'test-sql',
+      //     error: function(response) { $('#test-sql-results').html(response.status); },
+      //     success: function(response) {
+      //       console.log(response.status);
+      //       $('#test-sql-results').html(response.status);
+      //     }
+      //   });
+      //   return false;
+      // })
     });
   </script>
 

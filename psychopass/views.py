@@ -24,11 +24,7 @@ def index(request):
 def testView(request):
     return render(request, 'psychopass/options.html', {})
 
-@csrf_exempt
-def testDirectSql(request):
-    response = JsonResponse({'status': 'Server ready'})
-    return response
-
+# Lexicon Match sentiment analysis algorithm
 @csrf_exempt
 def analyzeLexiconMatching(request):
     if request.method == 'GET':
@@ -40,6 +36,7 @@ def analyzeLexiconMatching(request):
         response = JsonResponse({'result' : analysis[3]})
         return response
 
+# Naive Bayes classifier sentiment analysis algorithm
 @csrf_exempt
 def analyzeClassifier(request):
     if request.method == 'GET':
@@ -156,4 +153,97 @@ def createTable(request):
     print(str(status))
     # RETURN A JSON RESPONSE
     response = JsonResponse({'status': str(status), 'table-name': tableName, 'fields':fields}, safe=False)
+    return response
+
+# Dynamic table writer
+@csrf_exempt
+def writeToTable(request):
+    form = request.POST.copy()
+
+    # Form data debug
+    print('Items')
+    for i in form.items():
+        print(i)
+
+    print('\nValues only')
+    for v in form.values():
+        print(v)
+
+    # The actual WRITE process
+    with connection.cursor() as cursor:
+        # Table lock
+        table_lock = "SELECT * FROM '%s'" % request.POST.get('tableId')
+        try:
+            locked_table = cursor.execute(table_lock)
+            # Check if the table exists, if TRUE, try accessing the columns first,
+            # then appending their names to an INITIAL INSERT INTO SQL.
+            if locked_table:
+                status = 'Table found!'
+                print('\n\n',status)
+                try:
+                    column_check = "PRAGMA table_info('%s')" % request.POST.get('tableId')
+                    column_lock = cursor.execute(column_check)
+                    # This will only be executed if the table exists AND there are columns in it.
+                    if column_lock:
+                        initial_insert_sql = "INSERT INTO `%s` (" % request.POST.get('tableId')
+                        names = [description[1] for description in column_lock]
+                        print('Number of columns in table: ', len(names))
+
+                        # Loop through the column names (excluding the rowId column)
+                        # and join it with the initial INSERT INTO query.
+                        for col in range(1, len(names), 1):
+                            colName = "`%s`" % names[col]
+                            if col < len(names)-1:
+                                initial_insert_sql = ''.join([initial_insert_sql, colName, ','])
+                            elif col == len(names)-1:
+                                initial_insert_sql = ''.join([initial_insert_sql, colName, ')'])
+
+                        print('\n\nProgramatically generated INSERT INTO query:')
+                        print(initial_insert_sql)
+
+                        # Loop through the form values (excluding the hidden form ID)
+                        # and join it with the initial VALUES query
+                        initial_values_sql = "VALUES ("
+                        field_values = []   # array for field values
+
+                        # Get the field values then append it to the array above.
+                        for v in form.values():
+                            field_values.append(v)
+
+                        # Loop through the values (excluding the hidden form ID)
+                        for val in range(1, len(field_values), 1):
+                            value = "'%s'" % field_values[val]    # Format each value to be quote enclosed first.
+
+                            # Then join it to the VALUES query
+                            if val < len(field_values) - 1:
+                                initial_values_sql = ''.join([initial_values_sql, value, ','])
+                            elif val == len(field_values) - 1:
+                                initial_values_sql = ''.join([initial_values_sql, value, ')'])
+
+                        print('\n\nProgramatically generated VALUES query:')
+                        print(initial_values_sql)
+
+                        # Construct the final SQL query
+                        sql_final = ' '.join([initial_insert_sql, initial_values_sql])
+                        print('\n\nProgramatically generated INSERT INTO VALUES query:')
+                        print(sql_final)
+
+                        # Try and execute the FINAL query. THIS WILL INSERT THE VALUES INTO
+                        # THE TABLE IDENTIFIED BY THE HIDDEN INPUT VALUE.
+                        try:
+                            print('Executing final query...')
+                            cursor.execute(sql_final)
+                            print('\n\nValues successfully saved.')
+                        except Exception as ex:
+                            print(ex)
+
+                except Exception as ex:
+                    print(ex)
+
+        except Exception as ex:
+            print(ex)
+
+    #print(status)
+    # Return a JSON response
+    response = JsonResponse({'response': 'You have reached the writer.'})
     return response

@@ -4,8 +4,8 @@ from . import views
 urlpatterns = [
     path(r'', views.index, name='index'),
     path(r'test', views.testView, name='testView'),
-    path(r'test-sql', views.testDirectSql, name='testDirectSql'),
     path(r'analyze/mode=lexicon', views.analyzeLexiconMatching, name='analyzeLexiconMatching'),
     path(r'analyze/mode=classifier', views.analyzeClassifier, name='analyzeClassifier'),
-    path(r'create', views.createTable, name='createTable')
+    path(r'create', views.createTable, name='createTable'),
+    path(r'write', views.writeToTable, name='writeToTable')
 ]
