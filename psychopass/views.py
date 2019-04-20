@@ -24,6 +24,9 @@ def index(request):
 def testView(request):
     return render(request, 'psychopass/options.html', {})
 
+def thanks(request):
+    return render(request, 'psychopass/thankYou.html', {})
+
 # Front-end communication preparations
 @csrf_exempt
 def prepareData(request):
@@ -318,4 +321,4 @@ def writeToTable(request):
         # return response
 
         # Return an HttpResponseRedirect to the Thank You page
-        return render(request, 'psychopass/thankYou.html', {})
+        return HttpResponseRedirect('https://marknolledo.pythonanywhere.com/sibyl/thanks')

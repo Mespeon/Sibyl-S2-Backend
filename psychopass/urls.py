@@ -8,5 +8,6 @@ urlpatterns = [
     path(r'analyze/mode=classifier', views.analyzeClassifier, name='analyzeClassifier'),
     path(r'create', views.createTable, name='createTable'),
     path(r'write', views.writeToTable, name='writeToTable'),
-    path(r'prepare', views.prepareData, name='prepareData')
+    path(r'prepare', views.prepareData, name='prepareData'),
+    path(r'thanks', views.thanks, name='thanks')
 ]
