@@ -33,7 +33,6 @@ def prepareData(request):
         return response
     else:
         form = request.POST.copy()
-        message = '[Sibyl Endpoint] Well done. You have reached us using a POST request.'
         status = 'A status message should be returned.'
 
         # Perform a statistics request sequence
@@ -50,8 +49,12 @@ def prepareData(request):
                 try:
                     column_check = "PRAGMA table_info(`%s`)" % form.get('text--formId')
                     column_lock = cursor.execute(column_check)
-
                     columns = len([description[0] for description in column_lock])
+
+                    name_lock = cursor.execute(column_check)
+                    names = [description[1] for description in name_lock]
+
+                    print(names)
 
                 except Exception as ex:
                     status = ex
@@ -59,12 +62,20 @@ def prepareData(request):
             except Exception as ex:
                 status = ex
 
-        status = 'A-OK!'
+        # Prepare values to be returned
+        status = 'Data successfully retrieved.'
         return_row = row
         return_row_count = row_count
-        return_col = columns
+        return_col_count = columns
+        return_col_names = names
+
         # Return a JSON response
-        response = JsonResponse({'status': status, 'message': message, 'received': form, 'rows': return_row, 'colsCount': return_col, 'rowsCount': return_row_count}, safe=False)
+        response = JsonResponse({'status': status,
+        'received': form,
+        'rows': return_row,
+        'cols': return_col_names,
+        'colsCount': return_col_count,
+        'rowsCount': return_row_count}, safe=False)
         return response
 
 # Lexicon Match sentiment analysis algorithm
@@ -303,5 +314,8 @@ def writeToTable(request):
 
         #print(status)
         # Return a JSON response
-        response = JsonResponse({'response': 'You have reached the writer.', 'status': status}, safe=False)
-        return response
+        # response = JsonResponse({'response': 'You have reached the writer.', 'status': status}, safe=False)
+        # return response
+
+        # Return an HttpResponseRedirect to the Thank You page
+        return render(request, 'psychopass/thankYou.html', {})
