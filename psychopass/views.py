@@ -288,5 +288,5 @@ def writeToTable(request):
 
     #print(status)
     # Return a JSON response
-    response = JsonResponse({'response': 'You have reached the writer.', 'formData': form2, 'formCopy': form}, safe=False)
+    response = JsonResponse({'response': 'You have reached the writer.', 'form': form}, safe=False)
     return response
