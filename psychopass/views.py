@@ -24,6 +24,49 @@ def index(request):
 def testView(request):
     return render(request, 'psychopass/options.html', {})
 
+# Front-end communication preparations
+@csrf_exempt
+def prepareData(request):
+    if request.method == 'GET':
+        # Simply return something in JSON. This is just a status request, anyway.
+        response = JsonResponse({'message': '[Sibyl Endpoint] You have reached Sibyl.'})
+        return response
+    else:
+        form = request.POST.copy()
+        message = '[Sibyl Endpoint] Well done. You have reached us using a POST request.'
+        status = 'A status message should be returned.'
+
+        # Perform a statistics request sequence
+        with connection.cursor() as cursor:
+            # Perform a table lock
+            try:
+                sql = "SELECT * FROM `%s`" % form.get('text--formId')
+                cursor.execute(sql)
+                row = cursor.fetchall()
+                row_count = len(row)
+                print(row)
+
+                # Perform a column count
+                try:
+                    column_check = "PRAGMA table_info(`%s`)" % form.get('text--formId')
+                    column_lock = cursor.execute(column_check)
+
+                    columns = len([description[0] for description in column_lock])
+
+                except Exception as ex:
+                    status = ex
+
+            except Exception as ex:
+                status = ex
+
+        status = 'A-OK!'
+        return_row = row
+        return_row_count = row_count
+        return_col = columns
+        # Return a JSON response
+        response = JsonResponse({'status': status, 'message': message, 'received': form, 'rows': return_row, 'colsCount': return_col, 'rowsCount': return_row_count}, safe=False)
+        return response
+
 # Lexicon Match sentiment analysis algorithm
 @csrf_exempt
 def analyzeLexiconMatching(request):

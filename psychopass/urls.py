@@ -7,5 +7,6 @@ urlpatterns = [
     path(r'analyze/mode=lexicon', views.analyzeLexiconMatching, name='analyzeLexiconMatching'),
     path(r'analyze/mode=classifier', views.analyzeClassifier, name='analyzeClassifier'),
     path(r'create', views.createTable, name='createTable'),
-    path(r'write', views.writeToTable, name='writeToTable')
+    path(r'write', views.writeToTable, name='writeToTable'),
+    path(r'prepare', views.prepareData, name='prepareData')
 ]

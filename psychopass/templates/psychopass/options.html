@@ -24,87 +24,222 @@
       font-family: sans-serif;
       color: #00a99d;
     }
+
+    span {
+      display: block;
+    }
+
+    span.heavy {
+      font-weight: bold;
+      font-size: calc(0.5rem + 0.8vmin);
+    }
+
+    span.light {
+      margin-top: calc(0.5rem + 0.1vmin);
+      color: #f44336;
+      font-weight: bold;
+    }
   </style>
 </head>
 
 <body>
   <div id="wrapper">
-    <div id="content--options-page">
-      <span id="test-sql-results">Senpai, notice me.</span><br/>
-      <!-- <a href="" id="test-sql-link">Test direct SQL execution from a frontend request</a> -->
+      <div id="content--options-page">
+        <h1>Sibyl Analysis</h1>
+        <span class="heavy">Want a form analyzed? You've come to the right place!</span>
+        <span class="light">We say it's the right place, but in order for them to be analyzed, they should come from us.</span>
 
-      <h1>Create a form automagically</h1>
-      <div style="margin-top: 50px;">
-        <input id="table-name" name="table-name">
-        <span id="table-name-display"></span>
-      </div>
-
-      <div style="margin-top: 50px;">
-        <button id="pass-4-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 4-column sample</button>
-        <button id="pass-5-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 5-column sample</button>
-        <button id="pass-11-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 11-column sample</button>
-      </div>
-
-      <h1>Sample Form</h1>
-      <form id="sampleForm" name="sampleForm" action="write" method="POST">
-        <div>
-          <label>Form ID is in a hidden input.</label>
-          <input type="hidden" id="tableId" name="tableId" value="donutmedia">
+        <div id="analysis--prepend">
+          <h2>Find your form (Prepend)</h2>
+          <span class="heavy">Enter your form's ID in order for us to begin.</span>
+          <span class="light">Forgot your ID? Try looking for the HTML file the form builder made for you before; the number is the form ID.</span>
+          <form id="form-findFormId" name="form-findFormId" action="prepare" method="POST">
+            <input type="text" id="text--formId" name="text--formId" required>
+            <input type="submit" id="submit--findFormId" name="submit--findFormId" value="Submit">
+          </form>
+          <span id="finder--status-display" class="light"></span>
         </div>
-        &nbsp;
-        <div>
-          <label>First Name</label>
-          <input type="text" id="text-firstName" name="text-firstName">
-          <br/><br/>
-          <label>Last Name</label>
-          <input type="text" id="text-lastName" name="text-lastName">
-          <br/><br/>
-          <label>Comment something</label><br/>
-          <textarea id="textarea-comment" name="textarea-comment" form="sampleForm" maxlength="100" cols="30" rows="10"></textarea>
-          <br/><br/>
-          <label>Awesomeness Scale</label><br/>
-          <input type="radio" id="option-5" name="awesomeness-scale" value="excellent" checked> 5 - Excellent<br/>
-          <input type="radio" id="option-4" name="awesomeness-scale" value="vsatisfactory"> 4 - Very Satisfactory<br/>
-          <input type="radio" id="option-3" name="awesomeness-scale" value="satisfactory"> 3 - Satisfactory<br/>
-          <input type="radio" id="option-2" name="awesomeness-scale" value="unsatisfactory"> 2 - Unsatisfactory<br/>
-          <input type="radio" id="option-1" name="awesomeness-scale" value="improvement"> 1 - Needs Improvement<br/>
-          <br/>
-          <label>Will you recommend?</label>
-          <select id="select-isAwesome" name="select-isAwesome">
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
+
+        <div id="analysis--append">
+          <h2>Form Statistics (Append)</h2>
+          <table id="form--statistics">
+            <tr>
+              <td>ROW COUNT</td>
+              <td id="form--rowCount"></td>
+            </tr>
+
+            <tr>
+              <td>COLUMN COUNT</td>
+              <td id="form--colCount"></td>
+            </tr>
+
+            <tr>
+              <td>RECENTS</td>
+            </tr>
+
+            <tr id="form--recent-comments">
+
+            </tr>
+          </table>
         </div>
-        <input type="submit" id="submit" name="submit" value="Submit">
-      </form>
-      <!-- <div class="content--option-container">
-        <h1 class="content--option-header">Test Sentiment Analysis<br/>(Lexicon Matching)</h1>
-        <form action="analyze/mode=lexicon" target="_blank" method="POST" id="form-analyze-single" name="form-analyze-single">
-          <label>Enter text</label><br/>
-          <textarea id="comment" name="comment" form="form-analyze-single" maxlength="100" cols="30" rows="10"></textarea><br/>
-          <input type="submit" id="submit--analyze-single" name="submit--analyze-single" value="Submit">
-        </form>
+
+        <div id="analysis--subjoin">
+          <h2>Form Sentiment Analysis (Subjoin)</h2>
+        </div>
+
+        <!-- DEVELOPMENT ELEMENTS -->
+        <!-- <span id="test-sql-results">Senpai, notice me.</span><br/>
+        <a href="" id="test-sql-link">Test direct SQL execution from a frontend request</a>
+
+        <h1>Create a form automagically</h1>
+        <div style="margin-top: 50px;">
+          <input id="table-name" name="table-name">
+          <span id="table-name-display"></span>
+        </div>
+
+        <div style="margin-top: 50px;">
+          <button id="pass-4-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 4-column sample</button>
+          <button id="pass-5-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 5-column sample</button>
+          <button id="pass-11-sample-columns" style="margin-bottom: 20px; display: block;">Pass a 11-column sample</button>
+        </div>
+
+        <h1>Sample Form</h1>
+        <form id="sampleForm" name="sampleForm" action="write" method="POST">
+          <div>
+            <label>Form ID is in a hidden input.</label>
+            <input type="hidden" id="tableId" name="tableId" value="donutmedia">
+          </div>
+          &nbsp;
+          <div>
+            <label>First Name</label>
+            <input type="text" id="text-firstName" name="text-firstName">
+            <br/><br/>
+            <label>Last Name</label>
+            <input type="text" id="text-lastName" name="text-lastName">
+            <br/><br/>
+            <label>Comment something</label><br/>
+            <textarea id="textarea-comment" name="textarea-comment" form="sampleForm" maxlength="100" cols="30" rows="10"></textarea>
+            <br/><br/>
+            <label>Awesomeness Scale</label><br/>
+            <input type="radio" id="option-5" name="awesomeness-scale" value="excellent" checked> 5 - Excellent<br/>
+            <input type="radio" id="option-4" name="awesomeness-scale" value="vsatisfactory"> 4 - Very Satisfactory<br/>
+            <input type="radio" id="option-3" name="awesomeness-scale" value="satisfactory"> 3 - Satisfactory<br/>
+            <input type="radio" id="option-2" name="awesomeness-scale" value="unsatisfactory"> 2 - Unsatisfactory<br/>
+            <input type="radio" id="option-1" name="awesomeness-scale" value="improvement"> 1 - Needs Improvement<br/>
+            <br/>
+            <label>Will you recommend?</label>
+            <select id="select-isAwesome" name="select-isAwesome">
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          <input type="submit" id="submit" name="submit" value="Submit">
+        </form> -->
+        <!-- <div class="content--option-container">
+          <h1 class="content--option-header">Test Sentiment Analysis<br/>(Lexicon Matching)</h1>
+          <form action="analyze/mode=lexicon" target="_blank" method="POST" id="form-analyze-single" name="form-analyze-single">
+            <label>Enter text</label><br/>
+            <textarea id="comment" name="comment" form="form-analyze-single" maxlength="100" cols="30" rows="10"></textarea><br/>
+            <input type="submit" id="submit--analyze-single" name="submit--analyze-single" value="Submit">
+          </form>
+        </div>
+        <div id="content--results-lexicon">
+          <span id="result-lexicon">If you see this text after form submission, <br/>something wrong happened in the JSON parsing.</span>
+        </div> -->
+
+        <!-- <div class="content--option-container">
+          <h1 class="content--option-header">Test Sentiment Analysis<br/>(Classifier)</h1>
+          <form action="analyze/mode=classifier" target="_blank" method="POST" id="form-analyze-classifier" name="form-analyze-classifier">
+            <label>Enter text</label><br/>
+            <textarea id="classifyComment" name="classifyComment" form="form-analyze-classifier" maxlength="100" cols="30" rows="10"></textarea><br/>
+            <input type="submit" id="submit--classify-single" name="submit--classify-single" value="Submit">
+          </form>
+        </div>
       </div>
-      <div id="content--results-lexicon">
-        <span id="result-lexicon">If you see this text after form submission, <br/>something wrong happened in the JSON parsing.</span>
+
+      <div id="content--results-classifier">
+        <span id="result-classifier">If you see this text after form submission, <br/>something wrong happened in the JSON parsing.</span>
       </div> -->
-
-      <!-- <div class="content--option-container">
-        <h1 class="content--option-header">Test Sentiment Analysis<br/>(Classifier)</h1>
-        <form action="analyze/mode=classifier" target="_blank" method="POST" id="form-analyze-classifier" name="form-analyze-classifier">
-          <label>Enter text</label><br/>
-          <textarea id="classifyComment" name="classifyComment" form="form-analyze-classifier" maxlength="100" cols="30" rows="10"></textarea><br/>
-          <input type="submit" id="submit--classify-single" name="submit--classify-single" value="Submit">
-        </form>
-      </div>
     </div>
 
-    <div id="content--results-classifier">
-      <span id="result-classifier">If you see this text after form submission, <br/>something wrong happened in the JSON parsing.</span>
-    </div> -->
   </div>
+  <div>
+    <span id="test-json-display">This text should be replaced by JSON objects.</span>
+</div>
 
   <script>
+    $(document).ready(function() {
+      $(document).ajaxStart(function(){
+        $('#test-json-display').html('An async process is started.');
+      }).ajaxStop(function() {
+        $('#test-json-display').html('Async process completed.');
+      });
+
+      // GET SOMETHING FROM THE SERVER ON PAGE LOAD.
+      $.ajax({
+        type: 'GET',
+        url: 'prepare',
+        error: function(response) { console.log(response) },
+        success: function(response) {
+          console.log(response);
+        }
+      });
+
+      // ACTION ON FORM FINDER SUBMISSION
+      $('#form-findFormId').submit(function() {
+        form = $(this);
+
+        // Begin async request
+        $.ajax({
+            type: 'POST',
+            url: 'prepare',
+            data: form.serialize(),
+            error: function()
+            {
+               alert("Request Failed");
+            },
+            success: function(response)
+            {
+               console.log(response)
+               $('#finder--status-display').html(response.status);
+               $('#form--rowCount').html(response.rowsCount);
+               $('#form--colCount').html(response.colsCount);
+
+               // Iterate through the JSON result and append them into
+               // the table. These will be programatically created.
+               $table = document.querySelector('#form--statistics');  // the table to be appended to
+
+               var i, v;
+               for (i = 0; i < response.rowsCount; i++) {
+                 // For the debugging LULZ
+                 console.log(response.rows[i][1]);
+                 console.log(response.rows[i][2]);
+
+                 // Create the rows and columns (MIGHT CHANGE TO STYLIZED DIVS)
+                 // Then assign them their values and CSS classes, if ever.
+                 var $tr = document.createElement('tr');  // parent child
+
+                 var $td_name = document.createElement('td'); // child element
+                 $td_name.textContent = response.rows[i][1];  // properties and attribs
+                 $tr.append($td_name);                        // append this to immediate parent
+
+                 var $td_value = document.createElement('td');
+                 $td_value.textContent = response.rows[i][2];
+                 $tr.append($td_value);
+
+                 $table.append($tr);  // Append to level 1 parent
+               }
+            }
+        });
+        return false;
+      });
+
+      function appendComments(comments) {
+        $('#form--recent-comments').append();
+      }
+    });
+  </script>
+  <!-- <script>
     var $input = document.querySelector('#table-name');
 
     $(function() {
@@ -222,7 +357,7 @@
       //   return false;
       // })
     });
-  </script>
+  </script> -->
 
   <!-- <script>
     var commentArea = document.querySelector('#comment');
