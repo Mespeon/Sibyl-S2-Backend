@@ -45,7 +45,7 @@
 <body>
   <div id="wrapper">
       <div id="content--options-page">
-        <h1>Sibyl Analysis</h1>
+        <!-- <h1>Sibyl Analysis</h1>
         <span class="heavy">Want a form analyzed? You've come to the right place!</span>
         <span class="light">We say it's the right place, but in order for them to be analyzed, they should come from us.</span>
 
@@ -85,10 +85,10 @@
 
         <div id="analysis--subjoin">
           <h2>Form Sentiment Analysis (Subjoin)</h2>
-        </div>
+        </div> -->
 
         <!-- DEVELOPMENT ELEMENTS -->
-        <!-- <span id="test-sql-results">Senpai, notice me.</span><br/>
+        <span id="test-sql-results">Senpai, notice me.</span><br/>
         <a href="" id="test-sql-link">Test direct SQL execution from a frontend request</a>
 
         <h1>Create a form automagically</h1>
@@ -134,7 +134,7 @@
             </select>
           </div>
           <input type="submit" id="submit" name="submit" value="Submit">
-        </form> -->
+        </form>
         <!-- <div class="content--option-container">
           <h1 class="content--option-header">Test Sentiment Analysis<br/>(Lexicon Matching)</h1>
           <form action="analyze/mode=lexicon" target="_blank" method="POST" id="form-analyze-single" name="form-analyze-single">
@@ -145,7 +145,7 @@
         </div>
         <div id="content--results-lexicon">
           <span id="result-lexicon">If you see this text after form submission, <br/>something wrong happened in the JSON parsing.</span>
-        </div> -->
+        </div>
 
         <!-- <div class="content--option-container">
           <h1 class="content--option-header">Test Sentiment Analysis<br/>(Classifier)</h1>
@@ -167,7 +167,7 @@
     <span id="test-json-display">This text should be replaced by JSON objects.</span>
 </div>
 
-  <script>
+  <!-- <script>
     $(document).ready(function() {
       $(document).ajaxStart(function(){
         $('#test-json-display').html('An async process is started.');
@@ -238,8 +238,9 @@
         $('#form--recent-comments').append();
       }
     });
-  </script>
-  <!-- <script>
+  </script> -->
+
+  <script>
     var $input = document.querySelector('#table-name');
 
     $(function() {
@@ -265,7 +266,8 @@
             success: function(response)
             {
                //alert('Request Sent');
-               console.log(response)
+               console.log(response);
+               console.log(form.serialize());
             } // this was missing
         });
         return false;
@@ -357,7 +359,7 @@
       //   return false;
       // })
     });
-  </script> -->
+  </script>
 
   <!-- <script>
     var commentArea = document.querySelector('#comment');
