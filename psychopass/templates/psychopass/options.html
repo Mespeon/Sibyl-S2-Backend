@@ -254,11 +254,21 @@
 
       $('#sampleForm').submit(function() {
         form = $(this);
+        $formData = new FormData(document.querySelector('#sampleForm'));
+        $formId = document.querySelector('#tableId');
+        $formValues = [];
+
+        for (var pair of $formData.entries()) {
+          $formValues.push(pair[1]);
+        }
+
+        console.log($formId.value);
+        console.log('Updated form values: ', $formValues);
 
         $.ajax({
             type: 'POST',
             url: 'write',
-            data: form.serialize(),
+            data: {tableName: $formId.value, formData: JSON.stringify($formValues)},
             error: function()
             {
                alert("Request Failed");
@@ -268,6 +278,7 @@
                //alert('Request Sent');
                console.log(response);
                console.log(form.serialize());
+               console.log(JSON.stringify(form));
             } // this was missing
         });
         return false;
