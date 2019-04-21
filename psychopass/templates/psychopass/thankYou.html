@@ -1,1 +1,86 @@
-<h1>THANK YOU~</h1>
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <title>Thank you!</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+  <style>
+    body {
+      width: 100%;
+      padding: 0px;
+      margin: 0px;
+      color: #fff;
+      background-color: #00a99d;
+      font-family: Roboto, sans-serif;
+    }
+
+    #wrapper {
+      width: 40%;
+      margin:auto;
+      margin-top: 30vh;
+    }
+
+    #wrapper h1 {
+      font-size: calc(0.5rem + 8vmin);
+      margin: 0px;
+      margin-bottom: calc(0.5rem + 2vmin);
+    }
+
+    #wrapper span {
+      display: block;
+      font-size: calc(0.5rem + 1.5vmin);
+    }
+
+    #wrapper button {
+      margin-top: calc(0.5rem + 2vmin);
+      border: none;
+      border-radius: 5px;
+      padding: calc(0.5rem + 1vmin);
+      background-color: #fff;
+      color: #00a99d;
+      font-weight: bold;
+      transition-duration: 0.3s;
+      -webkit-transition-duration: 0.3s;
+    }
+
+    #wrapper button:hover {
+      background-color: #00cc73;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #footer {
+      margin-top: 10vh;
+    }
+
+    #footer #copyright-header {
+      font-size: calc(0.5rem + 0.8vmin);
+    }
+
+    #footer #copyright-text {
+      font-size: calc(0.5rem + 0.5vmin);
+    }
+  </style>
+</head>
+<body>
+  <div id="wrapper">
+    <h1>Thank you!</h1>
+    <span>Your feedback has been successfully sent.</span>
+    <button id="teleport-button">Teleport to Google</button>
+
+    <div id="footer">
+      <span id="copyright-header">&copy; 2019 Team Sibyl S2</span>
+      <span id="copyright-text">All rights reserved.</span>
+    </div>
+  </div>
+
+  <!-- ONBOARD SCRIPT -->
+  <script>
+    document.querySelector('#teleport-button').addEventListener('click', function() {
+      window.location.replace('https://www.google.com');
+    });
+  </script>
+</body>
+</html>

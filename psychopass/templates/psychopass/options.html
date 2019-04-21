@@ -88,6 +88,10 @@
 
         <div id="analysis--subjoin">
           <h2>Form Sentiment Analysis (Subjoin)</h2>
+          <h4>PERFORM SENTIMENT ANALYSIS ON<br/>CURRENTLY SELECTED ENTRY SET</h4>
+
+          <span class="light">Make sure that the chosen entry set could possibly be analyzed for sentiment, or this will return a really irregular result.</span>
+          <button id="request-classification">Perform Sentiment Analysis on Current Entries</button>
         </div>
 
         <!-- DEVELOPMENT ELEMENTS -->
@@ -169,11 +173,14 @@
   </div>
   <div>
     <span id="test-json-display">This text should be replaced by JSON objects.</span>
-</div>
+  </div>
+
+  <button id="redirect">Redirect</button>
 
   <!-- PREPARE DATA SCRIPT -->
   <script>
     var $response;
+    var $currentEntrySet = 0;
 
     $(document).ready(function() {
       $(document).ajaxStart(function(){
@@ -189,12 +196,14 @@
         error: function(response) { console.log(response) },
         success: function(response) {
           console.log(response);
+          //window.location.replace('https://marknolledo.pythonanywhere.com/sibyl/thanks');
         }
       });
 
       // ACTION ON FORM FINDER SUBMISSION
       $('#form-findFormId').submit(function() {
         form = $(this);
+        $currentEntrySet = 0;
 
         // Begin async request
         $.ajax({
@@ -267,6 +276,7 @@
       document.querySelector('#column-switcher').addEventListener('change', function() {
         var select = document.querySelector('#column-switcher');
         var value = select.options[select.selectedIndex].value;
+        $currentEntrySet = value;
         console.log(value);
 
         // TABLE CREATION
@@ -294,6 +304,30 @@
         // END TABLE CREATION
       });
       // END EVENT LISTENER FOR THE DROPDOWN SELECTOR
+
+
+      // AGGREGATED CLASSIFY REQUEST HANDLER
+      document.querySelector('#request-classification').addEventListener('click', function() {
+        if ($currentEntrySet == 0) {
+          console.log('Current row cannot be classified.');
+        }
+        else {
+          var $formId = $response.received['text--formId'];
+          var $column = $response.cols[$currentEntrySet];
+
+          console.log($currentEntrySet);
+          $.ajax({
+            type: 'POST',
+            url: 'classify',
+            data: {formId: $formId, request: $column},
+            error: function(respose) { console.log(response) },
+            success: function(response) {
+              console.log(response);
+            }
+          });
+          return false;
+        }
+      });
     });
   </script>
 

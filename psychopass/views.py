@@ -82,6 +82,7 @@ def prepareData(request):
         return response
 
 # Lexicon Match sentiment analysis algorithm
+# This is used in the Developers Option's LM Tester.
 @csrf_exempt
 def analyzeLexiconMatching(request):
     if request.method == 'GET':
@@ -94,6 +95,7 @@ def analyzeLexiconMatching(request):
         return response
 
 # Naive Bayes classifier sentiment analysis algorithm
+# This is used in the Developers Option's NB Classifier Tester.
 @csrf_exempt
 def analyzeClassifier(request):
     if request.method == 'GET':
@@ -109,6 +111,7 @@ def analyzeClassifier(request):
         # 'The seminar was awesome! The topic was great, activities were wonderful, and there were pythons...so yea!',
         # ]
 
+        # The actual sentiment analysis request
         comment = request.POST.get('comment')           # get the comment (this is passed using an AJAX request)
         if comment == '':
             classification = 'There is nothing to classify here.'
@@ -129,6 +132,85 @@ def analyzeClassifier(request):
         # create a JSON response object using the analysis results
         # and return it back to the page
         response = JsonResponse({'result': classification})
+        return response
+
+# Aggregated Naive Bayes Classification
+# Used for the actual classification on entry sets.
+@csrf_exempt
+def aggregatedClassify(request):
+    if request.method == 'GET':
+        return HttpResponse('This is not the droid you are looking for. Move along.')
+    else:
+        # Determine which column (or entry set as we'll call here) needs to be classified.
+        formId = request.POST.get('formId')
+        entrySet = request.POST.get('request');
+
+        # Default values
+        status = 0
+        textSet = []
+        classification = ''
+        positives = 0
+        negatives = 0
+        p_average = 0
+        n_average = 0
+
+        # Try to lock on the table
+        with connection.cursor() as cursor:
+            try:
+                sql = "SELECT %s FROM `%s`" % (entrySet, formId)
+                cursor.execute(sql)
+                rows = cursor.fetchall()
+
+                # Append the fetched rows to an array
+                for v in rows:
+                    textSet.append(v)
+
+                for i in textSet:
+                    print(i)
+
+                # Then pass the array to the sentiment analysis script.
+                if len(textSet) == 0:
+                    classification = 'There is nothing to classify here.'
+                else:
+                    # Iterate through each item in the entry set
+                    for i in textSet:
+                        analysis = sibyl.sentiment_single(str(i))      # pass the comment to the single classifier
+                        if analysis[0] == 'pos':
+                            positives += 1
+                        else:
+                            negatives += 1
+
+                    # Classification
+                    if positives > negatives:
+                        classification = 'The entry set showed positive sentiment.'
+                    elif negatives > positives:
+                        classification = 'The entry set showed negative sentiment.'
+                    else:
+                        classification = 'The entry set is neutral.'
+
+                    # Averaging
+                    p_average = (positives / len(textSet)) * 100
+                    n_average = (negatives / len(textSet)) * 100
+
+                    p_adjusted = '{:.2f}'.format(p_average)
+                    n_adjusted = '{:.2f}'.format(n_average)
+
+                    # Return a 200 OK status
+                    status = 200
+
+            except Exception as ex:
+                print(ex)
+                status = 'Process failed.'
+
+        # Return a JSON response
+        response = JsonResponse({'status': status,
+        'formId': formId,
+        'entrySet': entrySet,
+        'classification': classification,
+        'positives': positives,
+        'negatives': negatives,
+        'positiveAverage': p_adjusted,
+        'negativeAverage': n_adjusted}, safe=False)
         return response
 
 # THE MODEL BYPASSING DIRECT SQL CREATE TABLE GOODNESS
@@ -235,7 +317,7 @@ def writeToTable(request):
         # for v in form.values():
         #     print(v)
 
-        status = ''
+        status = 0
 
         # The actual WRITE process
         with connection.cursor() as cursor:
@@ -302,7 +384,7 @@ def writeToTable(request):
                                 print('Executing final query...')
                                 cursor.execute(sql_final)
                                 print('\n\nValues successfully saved.')
-                                status = '[Sibyl Endpoint] Process executed without errors.'
+                                status = 200
                             except Exception as ex:
                                 print(ex)
                                 status = ex
@@ -317,8 +399,5 @@ def writeToTable(request):
 
         #print(status)
         # Return a JSON response
-        # response = JsonResponse({'response': 'You have reached the writer.', 'status': status}, safe=False)
-        # return response
-
-        # Return an HttpResponseRedirect to the Thank You page
-        return HttpResponseRedirect('https://marknolledo.pythonanywhere.com/sibyl/thanks')
+        response = JsonResponse({'response': 'You have reached the writer.', 'status': status}, safe=False)
+        return response
