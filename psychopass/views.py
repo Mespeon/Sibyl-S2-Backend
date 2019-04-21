@@ -206,6 +206,7 @@ def aggregatedClassify(request):
         response = JsonResponse({'status': status,
         'formId': formId,
         'entrySet': entrySet,
+        'entryCount': len(textSet),
         'classification': classification,
         'positives': positives,
         'negatives': negatives,
