@@ -217,83 +217,86 @@ def aggregatedClassify(request):
 # THE MODEL BYPASSING DIRECT SQL CREATE TABLE GOODNESS
 @csrf_exempt
 def createTable(request):
-    # Retrieve all the data submitted from the frontend
-    tableName = request.POST.get('tableName')
-    fields = json.loads(request.POST.get('fields'))
+    if request.method == 'GET':
+        return HttpResponse('This is not the droid you are looking for. Move along.')
+    else:
+        # Retrieve all the data submitted from the frontend
+        tableName = request.POST.get('tableName')
+        fields = json.loads(request.POST.get('fields'))
 
-    #sql = "CREATE TABLE '%s' ('rowId' int NOT NULL AUTO_INCREMENT, PRIMARY KEY('rowId'));" % tableName
-    sql_lite = "CREATE TABLE '%s' ('rowId' INTEGER PRIMARY KEY);" % tableName
-    ## CODE BLOCK FOR CURSOR EXECUTION
-    ## CLEANED FOR TESTING!
-    ## TAKE NOTE THAT OBJECT NAMES HERE FOLLOW THE STANDARD NAMES GIVEN
-    ## BY THE FORM BUILDER TO ITS CHILD ELEMENTS. SO LONG AS IT IS NOT REMOVED,
-    ## THIS BLOCK WILL WORK ALL THE TIME.
-    with connection.cursor() as cursor:
-        try:
-            # Create the table first
-            print('Creating table %s...' % tableName)
-            cursor.execute(sql_lite);
-            print('Table created.\n\n')
-
-            # Then alter it next
+        #sql = "CREATE TABLE '%s' ('rowId' int NOT NULL AUTO_INCREMENT, PRIMARY KEY('rowId'));" % tableName
+        sql_lite = "CREATE TABLE '%s' ('rowId' INTEGER PRIMARY KEY);" % tableName
+        ## CODE BLOCK FOR CURSOR EXECUTION
+        ## CLEANED FOR TESTING!
+        ## TAKE NOTE THAT OBJECT NAMES HERE FOLLOW THE STANDARD NAMES GIVEN
+        ## BY THE FORM BUILDER TO ITS CHILD ELEMENTS. SO LONG AS IT IS NOT REMOVED,
+        ## THIS BLOCK WILL WORK ALL THE TIME.
+        with connection.cursor() as cursor:
             try:
-                print('Altering table...')
-                for obj in fields:
-                    sql_begin = "ALTER TABLE '%s' ADD" % tableName
+                # Create the table first
+                print('Creating table %s...' % tableName)
+                cursor.execute(sql_lite);
+                print('Table created.\n\n')
 
-                    if obj[0:5] == 'text-':
-                        # FOR TEXT FIELDS
-                        print('Object detected: %s' % obj[0:4])
-                        object = "'%s' varchar(300);" % obj[5:]
-                    elif obj[0:7] == 'select-':
-                        # FOR SELECT GROUPS
-                        print('Object detected: %s' % obj[0:6])
-                        object = "'%s' varchar(25);" % obj[7:]
-                    elif obj[0:9] == 'textarea-':
-                        # FOR TEXT AREAS
-                        print('Object detected: %s' % obj[0:8])
-                        object = "'%s' varchar(300);" % obj[9:]
-                    elif obj[0:12] == 'radio-group-':
-                        # FOR RADIO GROUPS
-                        print('Object detected: %s' % obj[0:11])
-                        object = "'%s' varchar(25);" % obj[12:]
-                    elif obj[0:15] == 'checkbox-group-':
-                        # FOR CHECKBOX GROUPS
-                        print('Object detected: %s' % obj[0:14])
-                        object = "'%s' varchar(25);" % obj[15:]
-                    elif obj[0:5] == 'date-':
-                        # FOR DATE FIELDS
-                        print('Object detected: %s' % obj[0:4])
-                        object = "'%s' varchar(25);" % obj[5:]
-                    elif obj[0:7] == 'hidden-':
-                        # FOR HIDDEN FIELDS
-                        print('Object detected: %s' % obj[0:6])
-                        object = "'%s' varchar(50);" % obj[7:]
-                    elif obj[0:7] == 'number-':
-                        # FOR NUMBER FIELDS
-                        print('Object detected: %s' % obj[0:6])
-                        object = "'%s' varchar(15);" % obj[7:]
-                    else:
-                        object =''
+                # Then alter it next
+                try:
+                    print('Altering table...')
+                    for obj in fields:
+                        sql_begin = "ALTER TABLE '%s' ADD" % tableName
 
-                    if object != '':
-                        sql_final = ' '.join([sql_begin, object])
-                        print('Creating column for %s...' % obj)
-                        cursor.execute(sql_final);
-                        print('Column created.\n\n')
+                        if obj[0:5] == 'text-':
+                            # FOR TEXT FIELDS
+                            print('Object detected: %s' % obj[0:4])
+                            object = "'%s' varchar(300);" % obj[5:]
+                        elif obj[0:7] == 'select-':
+                            # FOR SELECT GROUPS
+                            print('Object detected: %s' % obj[0:6])
+                            object = "'%s' varchar(25);" % obj[7:]
+                        elif obj[0:9] == 'textarea-':
+                            # FOR TEXT AREAS
+                            print('Object detected: %s' % obj[0:8])
+                            object = "'%s' varchar(300);" % obj[9:]
+                        elif obj[0:12] == 'radio-group-':
+                            # FOR RADIO GROUPS
+                            print('Object detected: %s' % obj[0:11])
+                            object = "'%s' varchar(25);" % obj[12:]
+                        elif obj[0:15] == 'checkbox-group-':
+                            # FOR CHECKBOX GROUPS
+                            print('Object detected: %s' % obj[0:14])
+                            object = "'%s' varchar(25);" % obj[15:]
+                        elif obj[0:5] == 'date-':
+                            # FOR DATE FIELDS
+                            print('Object detected: %s' % obj[0:4])
+                            object = "'%s' varchar(25);" % obj[5:]
+                        elif obj[0:7] == 'hidden-':
+                            # FOR HIDDEN FIELDS
+                            print('Object detected: %s' % obj[0:6])
+                            object = "'%s' varchar(50);" % obj[7:]
+                        elif obj[0:7] == 'number-':
+                            # FOR NUMBER FIELDS
+                            print('Object detected: %s' % obj[0:6])
+                            object = "'%s' varchar(15);" % obj[7:]
+                        else:
+                            object =''
 
-                    status = '[Sibyl Endpoint] Process executed without errors.'
+                        if object != '':
+                            sql_final = ' '.join([sql_begin, object])
+                            print('Creating column for %s...' % obj)
+                            cursor.execute(sql_final);
+                            print('Column created.\n\n')
+
+                        status = '[Sibyl Endpoint] Process executed without errors.'
+
+                except Exception as ex:
+                    status = ex
 
             except Exception as ex:
                 status = ex
 
-        except Exception as ex:
-            status = ex
-
-    print(str(status))
-    # RETURN A JSON RESPONSE
-    response = JsonResponse({'status': str(status), 'table-name': tableName, 'fields':fields}, safe=False)
-    return response
+        print(str(status))
+        # RETURN A JSON RESPONSE
+        response = JsonResponse({'status': str(status), 'table-name': tableName, 'fields':fields}, safe=False)
+        return response
 
 # Dynamic table writer
 @csrf_exempt
@@ -402,3 +405,5 @@ def writeToTable(request):
         # Return a JSON response
         response = JsonResponse({'response': 'You have reached the writer.', 'status': status}, safe=False)
         return response
+    else:
+        return HttpResponse('You have reached a place not meant for humans. Consider turning around.')
