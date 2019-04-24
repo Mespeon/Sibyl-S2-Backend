@@ -150,7 +150,7 @@ def aggregatedClassify(request):
         status = 0
         textSet = []
         classification = ''
-        entryClassification = {}
+        entryClassification = []
         positives = 0
         negatives = 0
         p_average = 0
@@ -181,10 +181,10 @@ def aggregatedClassify(request):
                         analysis = sibyl.sentiment_single(str(i))      # pass the comment to the single classifier
                         if analysis[0] == 'pos':
                             positives += 1
-                            entryClassification[ctr] = analysis[0]
+                            entryClassification.append(analysis[0])
                         else:
                             negatives += 1
-                            entryClassification[ctr] = analysis[0]
+                            entryClassification.append(analysis[0])
 
                         ctr += 1
 
