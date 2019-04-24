@@ -25,6 +25,7 @@ import re
 # For sorting dictionaries
 import operator
 import string
+from array import *
 
 # Initialize stopwords
 stops = set(stopwords.words('english'))
@@ -40,6 +41,8 @@ class LexiconAnalysis():
     def beginLexAnalysis(inputComment):
         # Intialize an empty list to hold all of our tweets
         comments = []
+        negativeLex = []
+        positiveLex = []
 
         # A helper function that removes all the non ASCII characters
         # from the given string. Retuns a string with only ASCII characters.
@@ -61,7 +64,6 @@ class LexiconAnalysis():
 
         # Use lexicon to score comments
         comment = dict()
-
         # Remove punctuation marks
         comment['orig'] = inputComment
         comment['orig'] = comment['orig'].translate(str.maketrans('', '', string.punctuation))
@@ -75,12 +77,17 @@ class LexiconAnalysis():
         comments.append(comment)
 
         for c in comments:
-            print(c)
+            #print(c)
             score = 0
             for word in c['clean'].split():
                 if word in lexicon:
                     score += lexicon[word]
-                    print('Found in lexicon: %s \t\t Current score: %5d' % (word, score))
+                    #print('Found in lexicon: %s \t\t Current score: %5d' % (word, score))
+                    #print('Word value: %s' % lexicon[word])
+                    if lexicon[word] > 0:
+                        positiveLex.append(word)
+                    elif lexicon[word] < 0:
+                        negativeLex.append(word)
 
             c['score'] = score
             if (score > 0):
@@ -96,10 +103,10 @@ class LexiconAnalysis():
         num_pos = sum([1 for c in comments if c['sentiment'] == 'positive'])
         num_neg = sum([1 for c in comments if c['sentiment'] == 'negative'])
         num_neu = sum([1 for c in comments if c['sentiment'] == 'neutral'])
-        print('Comments retrieved: %5d' % total)
-        print("Positive: %5d (%.1f%%)" % (num_pos, 100.0 * (num_pos/total)))
-        print("Negative: %5d (%.1f%%)" % (num_neg, 100.0 * (num_neg/total)))
-        print("Neutral:  %5d (%.1f%%)" % (num_neu, 100.0 * (num_neu/total)))
+        #print('Comments retrieved: %5d' % total)
+        #print("Positive: %5d (%.1f%%)" % (num_pos, 100.0 * (num_pos/total)))
+        #print("Negative: %5d (%.1f%%)" % (num_neg, 100.0 * (num_neg/total)))
+        #print("Neutral:  %5d (%.1f%%)" % (num_neu, 100.0 * (num_neu/total)))
         if num_pos > num_neg:
             resultText = 'The phrase showed a positive polarity.'
         elif num_neg > num_pos:
@@ -107,4 +114,4 @@ class LexiconAnalysis():
         elif num_pos == num_neg or num_neu > (num_pos + num_neg):
             resultText = 'The phrase is neutral.'
 
-        return [num_pos, num_neg, num_neu, resultText]
+        return [num_pos, num_neg, num_neu, resultText, positiveLex, negativeLex]

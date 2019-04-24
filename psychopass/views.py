@@ -7,6 +7,7 @@ from .models import *
 
 import json
 import string
+import sqlite3 as db
 
 #Cross-app Model Referencing
 from registry.models import UserAccount
@@ -149,10 +150,13 @@ def aggregatedClassify(request):
         status = 0
         textSet = []
         classification = ''
+        entryClassification = {}
         positives = 0
         negatives = 0
         p_average = 0
         n_average = 0
+        positiveLex = []
+        negativeLex = []
 
         # Try to lock on the table
         with connection.cursor() as cursor:
@@ -165,20 +169,37 @@ def aggregatedClassify(request):
                 for v in rows:
                     textSet.append(v)
 
-                for i in textSet:
-                    print(i)
-
                 # Then pass the array to the sentiment analysis script.
                 if len(textSet) == 0:
                     classification = 'There is nothing to classify here.'
                 else:
                     # Iterate through each item in the entry set
+                    # This loop is for the NB classifier.
+                    print('Requesting classification from Classifier-chan...')
+                    ctr = 0
                     for i in textSet:
                         analysis = sibyl.sentiment_single(str(i))      # pass the comment to the single classifier
                         if analysis[0] == 'pos':
                             positives += 1
+                            entryClassification[ctr] = analysis[0]
                         else:
                             negatives += 1
+                            entryClassification[ctr] = analysis[0]
+
+                        ctr += 1
+
+                    print(entryClassification)
+                    # This loop is for the lexicon matcher for polarized words
+                    print('Requesting lexicon match from Lexicon-kun...')
+                    for m in textSet:
+                        analysisLex = lex.LexiconAnalysis.beginLexAnalysis(str(m))
+
+                        # Append positive and negative lex matches to array
+                        for lexus in analysisLex[4]:
+                            positiveLex.append(lexus)
+
+                        for lexus in analysisLex[5]:
+                            negativeLex.append(lexus)
 
                     # Classification
                     if positives > negatives:
@@ -208,10 +229,13 @@ def aggregatedClassify(request):
         'entrySet': entrySet,
         'entryCount': len(textSet),
         'classification': classification,
+        'entryClassification': entryClassification,
         'positives': positives,
         'negatives': negatives,
         'positiveAverage': p_adjusted,
-        'negativeAverage': n_adjusted}, safe=False)
+        'negativeAverage': n_adjusted,
+        'positiveLexes': positiveLex,
+        'negativeLexes': negativeLex}, safe=False)
         return response
 
 # THE MODEL BYPASSING DIRECT SQL CREATE TABLE GOODNESS
