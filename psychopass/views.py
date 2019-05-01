@@ -37,6 +37,7 @@ def prepareData(request):
         return response
     else:
         form = request.POST.copy()
+        formId = request.POST.get('text--formId')
         status = 'A status message should be returned.'
 
         # Perform a statistics request sequence
@@ -75,11 +76,72 @@ def prepareData(request):
 
         # Return a JSON response
         response = JsonResponse({'status': status,
-        'received': form,
+        'received': formId,
         'rows': return_row,
         'cols': return_col_names,
         'colsCount': return_col_count,
         'rowsCount': return_row_count}, safe=False)
+        return response
+
+#Statistical data pull
+@csrf_exempt
+def prepareStatistics(request):
+    if request.method == 'GET':
+        return HttpResponse('Okaaay, so you reached me. But I won\'t talk unless you give me what I need.')
+    else:
+         # This should come from the extension, sent by the selector on value change on specific values.
+        form = request.POST.get('formId')
+        column = request.POST.get('column')
+        status = 'This should be overwritten after the process.'
+        distinctValueSet = []
+        distinctValueCount = []
+        distinctPercentage = []
+
+        # Perform column statistics on the selected column
+        with connection.cursor() as cursor:
+            try:
+                # Perform a query for DISTINCT and COUNT(entry) values GROUPED BY column
+                sql = 'SELECT DISTINCT `%s` AS "distinctValues", COUNT(`%s`) AS "entryCount" FROM `%s` GROUP BY `%s`' % (column, column, form, column)
+                cursor.execute(sql)
+                row = cursor.fetchall()
+                print(row)
+
+                # Append distinct values and count to respective array
+                for i in range(0, len(row), 1):
+                    distinctValueSet.append(row[i][0])
+
+                for i in range(0, len(row), 1):
+                    distinctValueCount.append(row[i][1])
+
+                # Execute a separate query to get the actual row count of the table
+                sql_table_length = 'SELECT rowId FROM `%s`' % form
+                cursor.execute(sql_table_length)
+                entry_count = cursor.fetchall()
+                print(len(entry_count))
+
+                # Perform percentage calculations on distinct counts
+                row_count = len(entry_count)
+                for i in range(0, len(distinctValueCount), 1):
+                    percentage = (distinctValueCount[i] / row_count) * 100
+                    percentage_formatted = '{:.2f}'.format(percentage)
+                    distinctPercentage.append(percentage_formatted)
+
+                # Return an OK status if this try block executes successfully.
+                status = '200 OK'
+            except Exception as ex:
+                print(ex)
+                status = 'Process failed.'
+
+        # Prepare values to be returned
+        distinct = distinctValueSet
+        distCount = distinctValueCount
+        distDistribution = distinctPercentage
+
+        # Prepare JSON response
+        response = JsonResponse({'status': status,
+        'distinctValues': distinct,
+        'distinctCount': distCount,
+        'distinctDistribution': distDistribution}, safe=False)
         return response
 
 # Lexicon Match sentiment analysis algorithm
@@ -275,7 +337,8 @@ def createTable(request):
                         elif obj[0:7] == 'select-':
                             # FOR SELECT GROUPS
                             print('Object detected: %s' % obj[0:6])
-                            object = "'%s' varchar(25);" % obj[7:]
+                            #object = "'%s' varchar(25);" % obj[7:]
+                            object = "'%s' varchar(25);" % obj
                         elif obj[0:9] == 'textarea-':
                             # FOR TEXT AREAS
                             print('Object detected: %s' % obj[0:8])
@@ -283,11 +346,13 @@ def createTable(request):
                         elif obj[0:12] == 'radio-group-':
                             # FOR RADIO GROUPS
                             print('Object detected: %s' % obj[0:11])
-                            object = "'%s' varchar(25);" % obj[12:]
+                            #object = "'%s' varchar(25);" % obj[12:]
+                            object = "'%s' varchar(25);" % obj
                         elif obj[0:15] == 'checkbox-group-':
                             # FOR CHECKBOX GROUPS
                             print('Object detected: %s' % obj[0:14])
-                            object = "'%s' varchar(25);" % obj[15:]
+                            #object = "'%s' varchar(25);" % obj[15:]
+                            object = "'%s' varchar(25);" % obj
                         elif obj[0:5] == 'date-':
                             # FOR DATE FIELDS
                             print('Object detected: %s' % obj[0:4])

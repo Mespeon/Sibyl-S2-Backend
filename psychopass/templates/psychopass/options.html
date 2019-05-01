@@ -63,8 +63,6 @@
         <div id="analysis--append">
           <h2>Form Statistics (Append)</h2>
           <select id="column-switcher"></select>
-
-          <!--TABLE ADJUSTMENT -->
           <table id="form--statistics">
             <tr>
               <td>ROW COUNT</td>
@@ -86,16 +84,16 @@
           </table>
         </div>
 
-        <div id="analysis--subjoin">
+        <!-- <div id="analysis--subjoin">
           <h2>Form Sentiment Analysis (Subjoin)</h2>
           <h4>PERFORM SENTIMENT ANALYSIS ON<br/>CURRENTLY SELECTED ENTRY SET</h4>
 
           <span class="light">Make sure that the chosen entry set could possibly be analyzed for sentiment, or this will return a really irregular result.</span>
           <button id="request-classification">Perform Sentiment Analysis on Current Entries</button>
-        </div>
+        </div> -->
 
         <!-- DEVELOPMENT ELEMENTS -->
-        <!-- <span id="test-sql-results">Senpai, notice me.</span><br/>
+        <span id="test-sql-results">Senpai, notice me.</span><br/>
         <a href="" id="test-sql-link">Test direct SQL execution from a frontend request</a>
 
         <h1>Create a form automagically</h1>
@@ -141,7 +139,7 @@
             </select>
           </div>
           <input type="submit" id="submit" name="submit" value="Submit">
-        </form> -->
+        </form>
 
         <!-- <div class="content--option-container">
           <h1 class="content--option-header">Test Sentiment Analysis<br/>(Lexicon Matching)</h1>
@@ -275,33 +273,67 @@
       // EVENT LISTENER FOR THE DROPDOWN SELECTOR
       document.querySelector('#column-switcher').addEventListener('change', function() {
         var select = document.querySelector('#column-switcher');
+        var text = select.options[select.selectedIndex].text;
         var value = select.options[select.selectedIndex].value;
+        var radioGroup = text.substring(0, 11);
+        var selectGroup = text.substring(0, 6);
+        var checkGroup = text.substring(0, 14);
+
         $currentEntrySet = value;
-        console.log(value);
+        console.log(value, text);
+        console.log(radioGroup, selectGroup, checkGroup);
 
-        // TABLE CREATION
-        // Iterate through the JSON result and append them into
-        // the table. These will be programatically created.
-        $('#form--statistics').html('');
-        $table = document.querySelector('#form--statistics');  // the table to be appended to
+        // Request quantification if column is applicable, else, show values from local values
+        if (radioGroup == 'radio-group' || selectGroup == 'select' || checkGroup == 'checkbox-group') {
+          $('#form--statistics').html('Requesting statistics...');
+          $.ajax({
+            type: 'POST',
+            url: 'statistics',
+            data: {formId: $response.received, column: text},
+            error: function(response) { console.log(response); },
+            success: function(response) {
+              $('#form--statistics').html('');
+              $table = document.querySelector('#form--statistics');
 
-        var i;
-        for (i = 0; i < $response.rowsCount; i++) {
-          // For the debugging LULZ
-          console.log($response.rows[i][value]);
-          console.log($response.rows[i][value]);
+              var i;
+              for (i = 0; i < response.distinctValues.length; i++) {
+                var $tr = document.createElement('tr');  // parent child
 
-          // Create the rows and columns (MIGHT CHANGE TO STYLIZED DIVS)
-          // Then assign them their values and CSS classes, if ever.
-          var $tr = document.createElement('tr');  // parent child
+                var $td_value = document.createElement('td');
+                $td_value.textContent = response.distinctValues[i] + " " + response.distinctCount[i] + " " + response.distinctDistribution[i];
+                $tr.append($td_value);
 
-          var $td_value = document.createElement('td');
-          $td_value.textContent = $response.rows[i][value];
-          $tr.append($td_value);
-
-          $table.append($tr);  // Append to level 1 parent
+                $table.append($tr);  // Append to level 1 parent
+              }
+            }
+          });
+          return false;
         }
-        // END TABLE CREATION
+        else {
+          // TABLE CREATION
+          // Iterate through the JSON result and append them into
+          // the table. These will be programatically created.
+          $('#form--statistics').html('');
+          $table = document.querySelector('#form--statistics');  // the table to be appended to
+
+          var i;
+          for (i = 0; i < $response.rowsCount; i++) {
+            // For the debugging LULZ
+            //console.log($response.rows[i][value]);
+            //console.log($response.rows[i][value]);
+
+            // Create the rows and columns (MIGHT CHANGE TO STYLIZED DIVS)
+            // Then assign them their values and CSS classes, if ever.
+            var $tr = document.createElement('tr');  // parent child
+
+            var $td_value = document.createElement('td');
+            $td_value.textContent = $response.rows[i][value];
+            $tr.append($td_value);
+
+            $table.append($tr);  // Append to level 1 parent
+          }
+          // END TABLE CREATION
+        }
       });
       // END EVENT LISTENER FOR THE DROPDOWN SELECTOR
 

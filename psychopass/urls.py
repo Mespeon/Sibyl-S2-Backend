@@ -9,6 +9,7 @@ urlpatterns = [
     path(r'create', views.createTable, name='createTable'),
     path(r'write', views.writeToTable, name='writeToTable'),
     path(r'prepare', views.prepareData, name='prepareData'),
+    path(r'statistics', views.prepareStatistics, name='prepareStatistics'),
     path(r'classify', views.aggregatedClassify, name='aggregatedClassify'),
     path(r'thanks', views.thanks, name='thanks')
 ]
