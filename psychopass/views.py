@@ -499,6 +499,6 @@ def writeToTable(request):
 
 ## IONIC APP TEST VIEWS
 def testComms(request):
-    if request.method == 'GET':
-	response = JsonResponse({'message': 'Oh, hi there! If you are seeing this, then the API still works.', 'status': '0'}, safe=False)
-	return response
+	if request.method == 'GET':
+		response = JsonResponse({'message': 'Oh, hi there! If you are seeing this, then the API still works.', 'status': '0'}, safe=False)
+		return response
