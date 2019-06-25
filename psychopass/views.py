@@ -496,3 +496,7 @@ def writeToTable(request):
         return response
     else:
         return HttpResponse('You have reached a place not meant for humans. Consider turning around.')
+
+## IONIC APP TEST VIEWS
+def testComms(request):
+    return HttpResponse('Oh hi there! Are you lost?')

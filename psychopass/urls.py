@@ -11,5 +11,8 @@ urlpatterns = [
     path(r'prepare', views.prepareData, name='prepareData'),
     path(r'statistics', views.prepareStatistics, name='prepareStatistics'),
     path(r'classify', views.aggregatedClassify, name='aggregatedClassify'),
-    path(r'thanks', views.thanks, name='thanks')
+    path(r'thanks', views.thanks, name='thanks'),
+
+    #Ionic App API Test Functions
+    path(r'ionic/testcomm', views.testComms, name='testComms')
 ]
