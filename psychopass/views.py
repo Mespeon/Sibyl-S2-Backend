@@ -16,6 +16,7 @@ from registry.models import UserAccount
 from registry import helloWorld
 from . import lexAnalysis as lex
 from . import sibyl
+from . import randomizer
 
 def index(request):
     return HttpResponse('You have reached Sibyl.')
@@ -501,7 +502,8 @@ def writeToTable(request):
 @csrf_exempt
 def testComms(request):
 	if request.method == 'GET':
-		response = JsonResponse({'message': 'Oh, hi there! If you are seeing this, then the API still works.', 'status': '0'}, safe=False)
+		randomizedQuote = randomizer.getRandomQuote()
+		response = JsonResponse({'message': randomizedQuote, 'status': '0'}, safe=False)
 		return response
 	else:
 		data = request.POST.get('message')
