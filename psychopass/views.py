@@ -17,6 +17,7 @@ from registry import helloWorld
 from . import lexAnalysis as lex
 from . import sibyl
 from . import randomizer
+from . import stargazer
 
 def index(request):
     return HttpResponse('You have reached Sibyl.')
@@ -508,4 +509,10 @@ def testComms(request):
 	else:
 		data = request.POST.get('message')
 		response = JsonResponse({'reply': 'Hello there! It seems you sent me something.', 'data': data, 'status': '0'}, safe=False)
+		return response
+
+def stargazer(request):
+	if request.method == 'GET':
+		otonokizaka = stargazer.preparePayload()
+		response = JsonResponse({'Muses': otonokizaka, 'status': 0}, safe=False)
 		return response
