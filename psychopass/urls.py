@@ -14,6 +14,6 @@ urlpatterns = [
     path(r'thanks', views.thanks, name='thanks'),
 
     #Ionic App API Test Functions
-    path(r'ionic/testcomm', views.testComms, name='testComms')
+    path(r'ionic/testcomm', views.testComms, name='testComms'),
     path(r'ionic/stargazer', views.stargazer, name='stargazer')
 ]
