@@ -150,7 +150,7 @@
         ctfFormValues.push(pair[1]);
       }
       // Debugging luls
-      console.log(JSON.stringify(ctfFormValues));
+      console.log(ctfFormValues);
 
       // Fetch construction
       console.log('Calling Sibyl API.');
@@ -159,6 +159,8 @@
         method: 'POST',
         body: {answer: JSON.stringify(ctfFormValues)}
       };
+
+      console.log(fetch_options);
 
       // Promise
       var sibylPromise = fetch(api_url, fetch_options);

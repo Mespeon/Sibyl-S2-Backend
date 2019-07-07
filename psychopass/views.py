@@ -522,9 +522,29 @@ def stargazer(request):
 def forVivien(request):
     return render(request, 'psychopass/senpai.html', {})
 
+@csrf_exempt
 def forSenpai(request):
+    message = 'Overwrite this with something.'
+    status = 4
+
+    # Determine first if the request is a GET or POST
     if request.method == 'GET':
         return HttpResponse('GET?')
     else:
-        response = JsonResponse({'status': 0}, safe=False)
-        return response
+        # Try to get the data from the form first,
+        # then return a JSON response.
+        try:
+            data = request.POST.get('answer')
+            if data == 'VIVIEN':
+                message = "Congratulations, it's the correct answer! Kindly take a screenshot of this page and show it to Adrine~"
+            else:
+                message = "Aww. Try again. :)"
+
+            status = 0
+        except Exception as ex:
+            message = ex
+            status = 1
+
+    # Return the response
+    response = JsonResponse({'status': status, 'message': message}, safe=False)
+    return response
