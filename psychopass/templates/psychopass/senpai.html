@@ -124,13 +124,15 @@
         <input type="text" id="senpai-ctf-answer" name="senpai-ctf-answer" maxlength="50" placeholder="Senpai{YOUR_ANSWER}" required>
         <button type="submit" value="submit">Submit</button>
       </form>
-      <span>
+      <span id="message"></span>
     </div>
   </div>
 
   <!-- ONBOARD SCRIPT -->
   <script>
     $(document).ready(function() {
+      $('#message').html(''); // refresh catcher
+
       $('#toggle-view-form').click(function() {
         $('#toggle-container').fadeToggle(500, function() {
           $('#hidden-form-wrapper').fadeToggle(500);
@@ -143,24 +145,21 @@
     senpaiForm.addEventListener('submit', function(event) {
       event.preventDefault();
 
+      $('#message').html('');
       console.log('Constructing form data.');
       var ctfAnswer = new FormData(document.querySelector('#senpai-ctf-form'));
       var ctfFormValues = [];
       for (var pair of ctfAnswer.entries()) {
         ctfFormValues.push(pair[1]);
       }
-      // Debugging luls
-      console.log(ctfFormValues);
 
       // Fetch construction
       console.log('Calling Sibyl API.');
       var api_url = 'https://marknolledo.pythonanywhere.com/sibyl/vivien/senpai';
       var fetch_options = {
         method: 'POST',
-        body: {answer: JSON.stringify(ctfFormValues)}
+        body: {answer: ctfFormValues[0]}
       };
-
-      console.log(fetch_options);
 
       // Promise
       var sibylPromise = fetch(api_url, fetch_options);
@@ -168,6 +167,7 @@
         return response.json();
       }).then(function(data) {
         console.log(data);
+        $('#message').html(data.message);
       }).catch(function(ex) {
         console.log(ex);
       }).finally(function() {

@@ -525,6 +525,7 @@ def forVivien(request):
 @csrf_exempt
 def forSenpai(request):
     message = 'Overwrite this with something.'
+    isCorrect = 0
     status = 4
 
     # Determine first if the request is a GET or POST
@@ -537,8 +538,10 @@ def forSenpai(request):
             data = request.POST.get('answer')
             if data == 'VIVIEN':
                 message = "Congratulations, it's the correct answer! Kindly take a screenshot of this page and show it to Adrine~"
+                isCorrect = 1
             else:
                 message = "Aww. Try again. :)"
+                isCorrect = 0
 
             status = 0
         except Exception as ex:
@@ -546,5 +549,5 @@ def forSenpai(request):
             status = 1
 
     # Return the response
-    response = JsonResponse({'status': status, 'message': message}, safe=False)
+    response = JsonResponse({'status': status, 'isCorrect': isCorrect, 'message': message}, safe=False)
     return response
