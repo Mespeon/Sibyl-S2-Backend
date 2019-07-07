@@ -18,6 +18,7 @@ from . import lexAnalysis as lex
 from . import sibyl
 from . import randomizer
 from . import stargazer as strg
+from . import senpai
 
 def index(request):
     return HttpResponse('You have reached Sibyl.')
@@ -518,19 +519,16 @@ def stargazer(request):
 		response = JsonResponse({'Muses': otonokizaka, 'status': 0}, safe=False)
 		return response
 
-@csrf_exempt
 def forVivien(request):
     if request.method =='GET':
-        header = 'Hello, Vivien-senpai~'
-        opening = 'Sorry po if masyado akong mabilis magturo haa.'
-        body = 'Pero gusto ko lang po ipaalam sa iyo na ayaw kitang mahirapan. Lagi akong suportado sa iyo. And lagi kitang aalalayan sa lahaaaat kailangan mo pong gawin. ^_^'
-        segue = 'Kasi I really really like you. I care for you a lot. And I will always do my best to make you smile. ^_^'
-        closing = 'This is something new, a message from me to you delivered using an API. Hehe. I think wala pa yata nakakagawa nito para sa iyo. xD'
-        closing2 = 'I really really like you Vivien. Sobra.'
-        closing3 = 'And it would really be awesome if we could try. But, just like a Promise() object or the Fetch() API, I am more than willing to await your response, no matter how long.'
-        closing4 = 'From me to you, with so much love and admiration~'
-
-        message = ' '.join([header, opening, body, segue, closing, closing2, closing3, closing4])
-
-        response = JsonResponse({'Adrine': message})
+        return render(request, 'psychopass/senpai.html', {})
+        # message = ''
+        # messageSet = senpai.intro_message_set
+        # for i in messageSet:
+        #     message = ''.join([message, i, ' '])
+        #
+        # response = JsonResponse({'Adrine': message})
+        # return response
+    else:
+        response = JsonResponse({'status': 0})
         return response

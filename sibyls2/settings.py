@@ -55,6 +55,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
+#CSRF_COOKIE_NAME = 'sibyltoken'
+#CSRF_COOKIE_SECURE = True
 
 ROOT_URLCONF = 'sibyls2.urls'
 

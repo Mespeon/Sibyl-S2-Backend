@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <title>Hello senpai!</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      width: 100%;
+      padding: 0px;
+      margin: 0px;
+      color: #fff;
+      background-color: #00a99d;
+      font-family: Roboto, sans-serif;
+    }
+
+    #wrapper {
+      width: 80%;
+      margin:auto;
+      margin-top: 15vh;
+    }
+
+    #wrapper h1 {
+      font-size: calc(0.5rem + 8vmin);
+      margin: 0px;
+      padding: 0px;
+      margin-bottom: calc(0.5rem + 2vmin);
+    }
+
+    #wrapper span {
+      display: block;
+      font-size: calc(0.5rem + 1.5vmin);
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    #wrapper span.heading {
+      font-size: calc(0.5rem + 2vmin);
+      font-weight: bold;
+    }
+
+    #wrapper button {
+      border: none;
+      border-radius: 5px;
+      padding: calc(0.5rem + 1vmin);
+      background-color: #fff;
+      color: #00a99d;
+      font-size: calc(0.5rem + 1.5vmin);
+      font-weight: bold;
+      transition-duration: 0.3s;
+      -webkit-transition-duration: 0.3s;
+    }
+
+    #wrapper button:hover {
+      background-color: #00cc73;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #footer {
+      margin-top: 10vh;
+    }
+
+    #footer #copyright-header {
+      font-size: calc(0.5rem + 0.8vmin);
+    }
+
+    #footer #copyright-text {
+      font-size: calc(0.5rem + 0.5vmin);
+    }
+
+    #toggle-container {
+      margin-top: calc(0.5rem + 5vmin);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    input {
+      font-size: calc(0.5rem + 1.5vmin);
+      padding: 1rem;
+      border: 2px solid #00a99d;
+      border-radius: 5px;
+      transition-duration: 0.3s;
+      -webkit-transition-duration: 0.3s;
+    }
+
+    input:hover, input:focus {
+      border: 2px solid #8e44ad;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="wrapper">
+    <div id="toggle-container">
+      <h1>Hello, senpai!</h1>
+      <span>So, heto na nga. I prepared something for you to solve po. Its format is similar sa CTF challenges na na-encounter ko po. :)</span>
+      <span>I'll be leaving a question here, then if alam niyo na po ang sagot, simply submit it in this format: <b>Senpai{YOUR_ANSWER}</b></span>
+      <span>For example, <b>Senpai{I_HEART_YOU}</b> As in all caps po 'yung mismong sagot.<br/>See? Madali lang po ito, pramis. :D</span>
+
+      <span class="heading">Ready senpai? Click the button below to see my question for you.</span>
+      <button id="toggle-view-form">View form</button>
+    </div>
+
+    <div id="hidden-form-wrapper" class="hidden">
+      <h1>Question for Senpai</h1>
+      <span class="heading">What is the name of the lady that Adrine likes the most?</span>
+      <span><b>Hints</b><br/>
+        <em>
+            FN only; LN not included<br/>
+            04 and 13<br/>
+            Adrine wants to find out if she likes ramen.<br/>
+            Adrine really really really likes her.
+        </em>
+      </span>
+      <form action="" id="senpai-ctf-form" name="senpai-ctf-form" method="POST">
+        <input type="text" id="senpai-ctf-answer" name="senpai-ctf-answer" maxlength="50" placeholder="Senpai{YOUR_ANSWER}" required>
+        <button type="submit" value="submit">Submit</button>
+      </form>
+      <span>
+    </div>
+  </div>
+
+  <!-- ONBOARD SCRIPT -->
+  <script>
+    $(document).ready(function() {
+      $('#toggle-view-form').click(function() {
+        $('#toggle-container').fadeToggle(500, function() {
+          $('#hidden-form-wrapper').fadeToggle(500);
+        })
+      });
+    });
+
+    // Submitting a form using Fetch API
+    var senpaiForm = document.getElementById('senpai-ctf-form');
+    senpaiForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      console.log('Constructing form data.');
+      var ctfAnswer = new FormData(document.querySelector('#senpai-ctf-form'));
+      var ctfFormValues = [];
+      for (var pair of ctfAnswer.entries()) {
+        ctfFormValues.push(pair[1]);
+      }
+      // Debugging luls
+      console.log(JSON.stringify(ctfFormValues));
+
+      // Fetch construction
+      console.log('Calling Sibyl API.');
+      var api_url = 'https://marknolledo.pythonanywhere.com/vivien/hello';
+      var fetch_options = {
+        method: 'POST',
+        body: JSON.stringify(ctfFormValues)
+      };
+
+      // Promise
+      var sibylPromise = fetch(api_url, fetch_options);
+      sibylPromise.then(function(response) {
+        return response.json();
+      }).then(function(data) {
+        console.log(data);
+      }).catch(function(ex) {
+        console.log(ex);
+      }).finally(function() {
+        console.log('Sibyl API call resolved.');
+      });
+    });
+  </script>
+</body>
+</html>
