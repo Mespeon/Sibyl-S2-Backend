@@ -536,6 +536,8 @@ def forSenpai(request):
         # then return a JSON response.
         try:
             data = request.POST.get('answer')
+            print(data)
+            
             if data == 'VIVIEN':
                 message = "Congratulations, it's the correct answer! Kindly take a screenshot of this page and show it to Adrine~"
                 isCorrect = 1
