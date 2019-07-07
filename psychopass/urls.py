@@ -19,4 +19,5 @@ urlpatterns = [
 
     #For Vivien
     path(r'vivien/hello', views.forVivien, name='forVivien'),
+    path(r'vivien/senpai', views.forSenpai, name='forSenpai'),
 ]

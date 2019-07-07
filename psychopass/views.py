@@ -18,7 +18,7 @@ from . import lexAnalysis as lex
 from . import sibyl
 from . import randomizer
 from . import stargazer as strg
-from . import senpai
+# from . import senpai
 
 def index(request):
     return HttpResponse('You have reached Sibyl.')
@@ -520,15 +520,11 @@ def stargazer(request):
 		return response
 
 def forVivien(request):
-    if request.method =='GET':
-        return render(request, 'psychopass/senpai.html', {})
-        # message = ''
-        # messageSet = senpai.intro_message_set
-        # for i in messageSet:
-        #     message = ''.join([message, i, ' '])
-        #
-        # response = JsonResponse({'Adrine': message})
-        # return response
+    return render(request, 'psychopass/senpai.html', {})
+
+def forSenpai(request):
+    if request.method == 'GET':
+        return HttpResponse('GET?')
     else:
-        response = JsonResponse({'status': 0})
+        response = JsonResponse({'status': 0}, safe=False)
         return response

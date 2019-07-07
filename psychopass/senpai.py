@@ -8,9 +8,3 @@ intro_message_set = [
 'And it would really be awesome if we could try. But, just like a Promise() object or the Fetch() API, I am more than willing to await your response, no matter how long.',
 'From me to you, with so much love and admiration~'
 ]
-
-message = ''
-for i in intro_message_set:
-    message = ''.join([message, i, ' '])
-
-print(message)
