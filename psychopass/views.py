@@ -515,8 +515,8 @@ def testComms(request):
 @csrf_exempt
 def stargazer(request):
 	if request.method == 'GET':
-		otonokizaka = strg.preparePayload()
-		response = JsonResponse({'Muses': otonokizaka, 'status': 0}, safe=False)
+		lovelive = strg.preparePayload()
+		response = JsonResponse({'data': lovelive, 'status': 200}, safe=False)
 		return response
 
 def forVivien(request):
@@ -537,7 +537,7 @@ def forSenpai(request):
         try:
             data = request.POST.get('answer')
             print(data)
-            
+
             if data == 'VIVIEN':
                 message = "Congratulations, it's the correct answer! Kindly take a screenshot of this page and show it to Adrine~"
                 isCorrect = 1
