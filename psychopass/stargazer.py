@@ -1,4 +1,5 @@
 def preparePayload():
+	base_url = ''
 	descriptors = [
 	"A 16-year-old, second-year high school student and founder of µ's. She is always smiling, and her redeeming feature is her energy. She acts on impulse and always runs head-first into things once she's made up her mind. Any and all problems are overcome with her inherent optimism, making her the engine and driving force behind µ's.",
 	"A 16-year-old, second-year high school student and Honoka's closest friend. They've been together since kindergarten. In contrast to Honoka, she has a kind and gentle personality, focuses on her studies, and is a model student. Although she's so gentle, she's also confident and reliable.",
@@ -46,7 +47,7 @@ def preparePayload():
 	# ]
 
 	cardPhotos = [
-	'',
+	'https://drive.google.com/file/d/1GClEvHI2ajTtHMqRsq0ejegvtcUSfjfH/view',
 	'',
 	'',
 	'',
