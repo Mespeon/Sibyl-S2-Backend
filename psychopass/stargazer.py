@@ -138,7 +138,7 @@ def preparePayload():
 	{'name': "Kosaka Honoka", 'description': descriptors[0], 'cardPhoto': cardPhotos[0], 'avatar': avatars[0], 'voice': voices[0]},
 	{'name': "Minami Kotori", 'description': descriptors[1], 'cardPhoto': cardPhotos[1], 'avatar': avatars[1], 'voice': voices[1]},
 	{'name': "Sonoda Umi", 'description': descriptors[2], 'cardPhoto': cardPhotos[2], 'avatar': avatars[2], 'voice': voices[2]},
-	{'name': "Koizumi Hanayo", 'description': descriptors[3], 'cardPhoto': cardPhotos[3], 'avatar': avatars[], 'voice': voices[3]},
+	{'name': "Koizumi Hanayo", 'description': descriptors[3], 'cardPhoto': cardPhotos[3], 'avatar': avatars[3], 'voice': voices[3]},
 	{'name': "Nishikino Maki", 'description': descriptors[4], 'cardPhoto': cardPhotos[4], 'avatar': avatars[4], 'voice': voices[4]},
 	{'name': "Hoshizora Rin", 'description': descriptors[5], 'cardPhoto': cardPhotos[5], 'avatar': avatars[5], 'voice': voices[5]},
 	{'name': "Yazawa Nico", 'description': descriptors[6], 'cardPhoto': cardPhotos[6], 'avatar': avatars[6], 'voice': voices[6]},
