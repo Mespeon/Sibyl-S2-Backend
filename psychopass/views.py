@@ -516,7 +516,7 @@ def testComms(request):
 def stargazer(request):
 	if request.method == 'GET':
 		lovelive = strg.preparePayload()
-		response = JsonResponse({'data': lovelive, 'status': 200}, safe=False)
+		response = JsonResponse({'data': lovelive}, safe=False)
 		return response
 
 def forVivien(request):
@@ -569,7 +569,6 @@ def stars(request):
         if len(paramsReceived) > 0:
             responseData.append(paramsReceived)
             responseMessage = 'There are %d parameters received.' % len(paramsReceived)
-            restrictorQuery = ''
         else:
             responseMessage = 'There are %d parameters received.' % len(paramsReceived)
 
