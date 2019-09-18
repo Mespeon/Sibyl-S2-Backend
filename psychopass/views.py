@@ -561,13 +561,21 @@ def stars(request):
         responseMessage = ''
 
         #Get all parameters passed to the API.
-        paramsReceived = list(request.GET.items())
+        paramsReceived = request.GET.dict()
+        print(paramsReceived)
 
         # Check if there are parameters passed,
         # then return a corresponding value.
         if len(paramsReceived) > 0:
             responseData.append(paramsReceived)
             responseMessage = 'There are %d parameters received.' % len(paramsReceived)
+            restrictorQuery = ''
+
+            # Restrictor parameters
+            if paramsReceived.__contains__()
+
+            with connection.cursor() as cursor:
+                query = 'SELECT '
         else:
             responseMessage = 'There are %d parameters received.' % len(paramsReceived)
 
