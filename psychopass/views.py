@@ -557,7 +557,7 @@ def forSenpai(request):
 @csrf_exempt
 def stars(request):
     if request.method == 'GET':
-        paramsReceived = request.GET.items()
+        paramsReceived = list(request.GET.items())
         print(paramsReceived)
         response = JsonResponse({
         'paramsReceived': 'Check server log.'
