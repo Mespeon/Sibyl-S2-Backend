@@ -516,8 +516,7 @@ def testComms(request):
 def stargazer(request):
 	if request.method == 'GET':
 		lovelive = strg.preparePayload()
-        paramsReceived = request.GET.items()
-		response = JsonResponse({'data': lovelive, 'status': 200, 'paramsReceived': paramsReceived}, safe=False)
+		response = JsonResponse({'data': lovelive, 'status': 200}, safe=False)
 		return response
 
 def forVivien(request):
@@ -554,3 +553,13 @@ def forSenpai(request):
     # Return the response
     response = JsonResponse({'status': status, 'isCorrect': isCorrect, 'message': message}, safe=False)
     return response
+
+@csrf_exempt
+def stars(request):
+    if request.method == 'GET':
+        paramsReceived = request.GET.items()
+        response = JsonResponse({
+        'paramsReceived': paramsReceived
+        }, safe=False)
+
+        return response
