@@ -570,12 +570,6 @@ def stars(request):
             responseData.append(paramsReceived)
             responseMessage = 'There are %d parameters received.' % len(paramsReceived)
             restrictorQuery = ''
-
-            # Restrictor parameters
-            if paramsReceived.__contains__()
-
-            with connection.cursor() as cursor:
-                query = 'SELECT '
         else:
             responseMessage = 'There are %d parameters received.' % len(paramsReceived)
 
