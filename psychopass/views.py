@@ -515,7 +515,6 @@ def testComms(request):
 @csrf_exempt
 def stargazer(request):
 	if request.method == 'GET':
-        paramsReceived = request.GET.items()
 		lovelive = strg.preparePayload()
 		response = JsonResponse({'data': lovelive, 'status': 200, 'paramsReceived': paramsReceived}, safe=False)
 		return response
