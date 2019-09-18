@@ -516,6 +516,7 @@ def testComms(request):
 def stargazer(request):
 	if request.method == 'GET':
 		lovelive = strg.preparePayload()
+        paramsReceived = request.GET.items()
 		response = JsonResponse({'data': lovelive, 'status': 200, 'paramsReceived': paramsReceived}, safe=False)
 		return response
 
