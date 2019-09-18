@@ -558,8 +558,9 @@ def forSenpai(request):
 def stars(request):
     if request.method == 'GET':
         paramsReceived = request.GET.items()
+        print(paramsReceived)
         response = JsonResponse({
-        'paramsReceived': paramsReceived
+        'paramsReceived': 'Check server log.'
         }, safe=False)
 
         return response
