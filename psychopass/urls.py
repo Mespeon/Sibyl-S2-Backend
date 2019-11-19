@@ -21,4 +21,8 @@ urlpatterns = [
     #For Vivien
     path(r'vivien/hello', views.forVivien, name='forVivien'),
     path(r'vivien/senpai', views.forSenpai, name='forSenpai'),
+
+    #For COE Toothbrush
+    path(r'coe/like', views.coeLike, name='coeLike'),
+    path(r'coe/react', views.coeReact, name='coeReact'),
 ]

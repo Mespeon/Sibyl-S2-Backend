@@ -578,3 +578,17 @@ def stars(request):
         }, safe=False)
 
         return response
+
+@csrf_exempt
+def coeLike(request):
+    if request.method == 'GET':
+        return HttpResponse('Do you like the COE Toothbrush?')
+    else:
+        return HttpResponse('I see you like the COE Toothbrush.')
+
+@csrf_exempt
+def coeReact(request):
+    if request.method == 'GET':
+        return HttpResponse('You want to react on the COE Toothbrush?')
+    else:
+        return HttpResponse('I see you wanna react to the COE Toothbrush.')
