@@ -582,9 +582,56 @@ def stars(request):
 @csrf_exempt
 def coeLike(request):
     if request.method == 'GET':
-        return HttpResponse('Do you like the COE Toothbrush?')
+        # For GET requests, simply return the length of the table.
+        error = 0
+        status = 'Overwrite this with a new message.'
+        data = ''
+        with connection.cursor() as cursor:
+            try:
+                sql = "SELECT * FROM `likes`"
+                cursor.execute(sql)
+                rows = cursor.fetchall()
+
+                # Append the fetched rows to an array
+                rowCount = []  # Overwrite this with a new value to check for validity.
+                for v in rows:
+                    rowCount.append(v)
+
+                data = {'length': len(rowCount)}
+            except Exception as ex:
+                print('Error GETting likes: ', ex)
+                status = 'Error GETting likes %s' % ex
+                error = 1
+                data = 'No data available.'
+
+        response = JsonResponse({
+        'error': error,
+        'status': status,
+        'data': data
+        }, safe=False)
+
+        return response
+
     else:
-        return HttpResponse('I see you like the COE Toothbrush.')
+        # For POST requests
+        likeFrom = request.POST.get('formId')
+        error = 0
+        status = 'Overwrite this with a new message.'
+
+        with connection.cursor() as cursor:
+            try:
+                pass
+            except Exception as ex:
+                print('Error POSTing like: ', ex)
+                status = 'Error POSTing like: %s' % ex
+                error = 1
+
+        response = JsonResponse({
+        'error': error,
+        'status': status
+        }, safe=False)
+
+        return response
 
 @csrf_exempt
 def coeReact(request):
