@@ -598,6 +598,7 @@ def coeLike(request):
                     rowCount.append(v)
 
                 data = {'length': len(rowCount)}
+                status = 'OK'
             except Exception as ex:
                 print('Error GETting likes: ', ex)
                 status = 'Error GETting likes %s' % ex
@@ -614,13 +615,27 @@ def coeLike(request):
 
     else:
         # For POST requests
-        likeFrom = request.POST.get('formId')
+        likeFrom = request.POST.get('likeFrom')
         error = 0
         status = 'Overwrite this with a new message.'
 
         with connection.cursor() as cursor:
+            # Table lock
+            table_lock = "SELECT * FROM 'likes'"
             try:
-                pass
+                locked_table = cursor.execute(table_lock)
+                if locked_table:
+                    print('Table found! Writing data...')
+                    try:
+                        query = "INSERT INTO `likes` (`from`) VALUES (%s)" % likeFrom
+                        print('Query: ', query)
+
+                        cursor.execute(query)
+                        status = 'OK'
+                    except Exception as ex:
+                        print('Error writing to table: ', ex)
+                        status = 'Error writing to table: %s' % ex
+                        error = 1
             except Exception as ex:
                 print('Error POSTing like: ', ex)
                 status = 'Error POSTing like: %s' % ex
@@ -628,7 +643,7 @@ def coeLike(request):
 
         response = JsonResponse({
         'error': error,
-        'status': status
+        'status': status,
         }, safe=False)
 
         return response
