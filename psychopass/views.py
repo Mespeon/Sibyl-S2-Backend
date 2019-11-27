@@ -627,7 +627,7 @@ def coeLike(request):
                 if locked_table:
                     print('Table found! Writing data...')
                     try:
-                        query = 'INSERT INTO `likes` (from) VALUES ("' + %s + '")' % likeFrom
+                        query = 'INSERT INTO `likes` (`from`) VALUES ("%s")' % likeFrom
                         print('Query: ', query)
 
                         cursor.execute(query)
