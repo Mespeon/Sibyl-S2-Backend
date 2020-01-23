@@ -743,3 +743,21 @@ def getToken(request):
         }, safe=False)
     else:
         return HttpResponse('You are not meant to be here.')
+
+@csrf_exempt
+def getAuth(request):
+    # If error is still set at -1, it means this function failed to do its thing.
+    error = -1
+    status = 'Unauthorized'
+    data = ''
+
+    if request.method == 'POST':
+        pass
+    else:
+        return HttpResponse('You are not supposed to be here.')
+
+    return JsonResponse({
+    'error': error,
+    'status': status,
+    'data': data
+    }, safe=False)
