@@ -770,8 +770,8 @@ def getAuth(request):
                     error = 1
                     status = 'Invalid token'
             except Exception as ex:
-                error: 1
-                status: 'Failed to authenticate token'
+                error = 1
+                status = 'Failed to authenticate token'
     else:
         return HttpResponse('You are not supposed to be here.')
 
