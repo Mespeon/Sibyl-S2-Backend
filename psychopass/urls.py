@@ -30,6 +30,7 @@ urlpatterns = [
     path(r'api/create', views.createApiTable, name='createApiTable'),
     path(r'api/token', views.getToken, name='getToken'),
     path(r'api/auth', views.getAuth, name='getAuth'),
-    # path(r'api/login', views.login, name='login'),
-    path(r'api/register', views.register, name='register')
+    path(r'api/login', views.login, name='login'),
+    path(r'api/register', views.register, name='register'),
+    path(r'api/logout', views.logout, name='logout')
 ]

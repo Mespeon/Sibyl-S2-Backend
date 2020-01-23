@@ -790,3 +790,90 @@ def register(request):
     error = -1
     status = 'Undetermined'
     data = {}
+
+    if request.method == 'POST':
+        form = json.loads(request.body.decode())
+
+        # Fork here first to check if the registration is from social or not.
+        if form['isSocial']:
+            pass
+        else:
+            pass
+
+        return JsonResponse({
+        'error': error,
+        'status': status,
+        'data': data
+        }, safe=False)
+    else:
+        return HttpResponse('Curious, aren\'t you?')
+
+@csrf_exempt
+def login(request):
+    error = -1
+    status = 'Undetermined'
+    data = {}
+
+    if request.method == 'POST':
+        form = json.loads(request.body.decode())
+
+        if form['isSocial']:
+            pass
+        else:
+            pass
+
+        return JsonResponse({
+        'error': error,
+        'status': status,
+        'data': data
+        }, safe=False)
+    else:
+        return HttpResponse('Why are you still here? You are not allowed inside, anyway.')
+
+    return JsonResponse({
+    'error': error,
+    'status': status,
+    'data': data
+    }, safe=False)
+
+@csrf_exempt
+def logout(request):
+    error = -1
+    status = 'Undetermined'
+    data = {}
+
+    if request.method == 'POST':
+        form = json.loads(request.body.decode())
+        myToken = form['token']
+
+        # Match the token given by the logout request, then remove it from the table.
+        with connection.cursor() as cursor:
+            sql_getToken = 'SELECT `token` FROM `device_tokens` WHERE `token` == "%s"' %s myToken
+            try:
+                cursor.execute(sql_getToken)
+                token = cursor.fetchall()
+
+                if len(token) > 0:
+                    sql_removeToken = 'DELETE from `device_tokens` WHERE `token` == "%s"' % myToken
+                    try:
+                        cursor.execute(sql_removeToken)
+
+                        error = 0
+                        status = 'OK'
+                    except Exception as ex:
+                        error = 1
+                        status = 'Failed to remove token'
+                else:
+                    error = 1
+                    status = 'No valid token found'
+            except Exception as ex:
+                error = 1
+                status = ex
+    else:
+        return HttpResponse('Aaaggghh for the nth time!')
+
+    return JsonResponse({
+    'error': error,
+    'status': status,
+    'data': data
+    }, safe=False)
