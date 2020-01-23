@@ -766,7 +766,7 @@ def getAuth(request):
                     if len(myToken) > 0:
                         error = 0
                         status = 'Authorized'
-                        data.append({'token': myToken})
+                        data.append({'token': myToken[0]})
                     else:
                         error = 1
                         status = 'Invalid token'
