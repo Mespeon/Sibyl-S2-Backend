@@ -722,7 +722,7 @@ def getToken(request):
             # FOR NOW, THIS APPROACH IS TEMPORARY UNTIL JWT AND FCM IS INTEGRATED
             # IN THIS PROJECT.
             # initial_insert_sql = "INSERT INTO `%s` (" % tableName
-            sql_writeToken = 'INSERT INTO `device_tokens` (`token`, `created_at`) VALUES (`%s`, `%s`)' % getAToken, timeNow
+            sql_writeToken = 'INSERT INTO `device_tokens` (`token`, `created_at`) VALUES (`%s`, `%s`)' % (getAToken, timeNow)
             with connection.cursor() as cursor:
                 try:
                     cursor.execute(sql_writeToken)
