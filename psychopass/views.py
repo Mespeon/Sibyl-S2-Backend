@@ -749,7 +749,7 @@ def getAuth(request):
     # If error is still set at -1, it means this function failed to do its thing.
     error = -1
     status = 'Unauthorized'
-    data = []
+    data = {}
 
     if request.method == 'POST':
         # Get the submitted token first.
