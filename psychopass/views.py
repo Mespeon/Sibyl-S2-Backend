@@ -765,7 +765,7 @@ def getAuth(request):
                     myToken = cursor.fetchall()
                     error = 0
                     status = 'Authorized'
-                    data = {'token': myToken}
+                    data = {'token': myToken[0]}
                 else:
                     error = 1
                     status = 'Invalid token'
