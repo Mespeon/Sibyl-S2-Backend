@@ -749,10 +749,29 @@ def getAuth(request):
     # If error is still set at -1, it means this function failed to do its thing.
     error = -1
     status = 'Unauthorized'
-    data = ''
+    data = {}
 
     if request.method == 'POST':
-        pass
+        # Get the submitted token first.
+        form = json.loads(request.body.decode())
+        thisToken = form['token']
+
+        # Authenticate the token first.
+        with connection.cursor() as cursor:
+            try:
+                sql_validateToken = 'SELECT `token` from `device_tokens` WHERE `token` == "%s"' % thisToken
+                cursor.execute(sql_validateToken)
+                if sql_validateToken:
+                    myToken = cursor.fetchall()
+                    error = 0
+                    status = 'Authorized'
+                    data = {'token': myToken}
+                else:
+                    error = 1
+                    status = 'Invalid token'
+            except Exception as ex:
+                error: 1
+                status: 'Failed to authenticate token'
     else:
         return HttpResponse('You are not supposed to be here.')
 
