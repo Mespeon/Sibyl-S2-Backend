@@ -706,7 +706,7 @@ def getToken(request):
     status = ''
     token = 'No token issued.'
 
-    if request.method == 'GET':
+    if request.method == 'POST':
         try:
             getAToken = csrf.get_token(request)
             timeNow = datetime.now()
