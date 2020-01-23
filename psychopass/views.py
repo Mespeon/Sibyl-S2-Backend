@@ -749,7 +749,7 @@ def getAuth(request):
     # If error is still set at -1, it means this function failed to do its thing.
     error = -1
     status = 'Unauthorized'
-    data = {}
+    data = []
 
     if request.method == 'POST':
         # Get the submitted token first.
@@ -766,7 +766,7 @@ def getAuth(request):
                     if len(myToken) > 0:
                         error = 0
                         status = 'Authorized'
-                        data = {'token': myToken[0]}
+                        data.append({'token': myToken})
                     else:
                         error = 1
                         status = 'Invalid token'
@@ -784,3 +784,9 @@ def getAuth(request):
     'status': status,
     'data': data
     }, safe=False)
+
+@csrf_exempt
+def register(request):
+    error = -1
+    status = 'Undetermined'
+    data = {}
