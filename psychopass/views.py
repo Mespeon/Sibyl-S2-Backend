@@ -664,10 +664,11 @@ def createApiTable(request):
     if request.method == 'GET':
         return HttpResponse('Hey, an unfamiliar face. What brings you here?')
     else:
-        # tableName = request.POST.get('tableName')
-        # fields = json.loads(request.POST.get('formData'))
-        tableName = request.POST.get('tblName')
-        tableCols = json.loads(request.POST.get('tblCols'))
+        # This will only work if the request has a Content-Type of 'application/json'
+        # and the form body is JSON.stringified. Otherwise, it may fail on other Content-Types.
+        form = json.loads(request.body.decode())
+        tableName = form['tblName']
+        tableCols = form['tblCols']
 
         sql_createTable = "CREATE TABLE '%s' ('rowId' INTEGER PRIMARY KEY);" % tableName
         with connection.cursor() as cursor:
