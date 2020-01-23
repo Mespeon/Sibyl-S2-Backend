@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
+import django.middleware.csrf as csrf
 
 from .models import *
 
@@ -654,3 +655,26 @@ def coeReact(request):
         return HttpResponse('You want to react on the COE Toothbrush?')
     else:
         return HttpResponse('I see you wanna react to the COE Toothbrush.')
+
+@csrf_exempt
+def getToken(request):
+    error = 0
+    status = ''
+    token = 'No token issued.'
+
+    if request.method == 'GET':
+        try:
+            getAToken = csrf.get_token()
+            status = 'OK'
+            token = getAToken
+        except Exception as ex:
+            error = 1
+            status = ex
+
+        return JsonResponse({
+        'error': error,
+        'status': status,
+        'token': token
+        }, safe=False)
+    else:
+        return HttpResponse('You are not meant to be here.')
