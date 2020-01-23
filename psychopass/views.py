@@ -9,6 +9,7 @@ from .models import *
 import json
 import string
 import sqlite3 as db
+from datetime import datetime
 
 #Cross-app Model Referencing
 from registry.models import UserAccount
@@ -708,8 +709,29 @@ def getToken(request):
     if request.method == 'GET':
         try:
             getAToken = csrf.get_token(request)
-            status = 'OK'
-            token = getAToken
+            timeNow = datetime.now()
+            # After getting a csrf_token, write it into the device_tokens table.
+            # This table will hold all the issued CSRF token by the middleware.
+            # All tokens in the table will be validated by the auth view whenever
+            # a request is trying to access a protected view.
+            #
+            # FOR SECURITY PURPOSES, WHENEVER THE LOGOUT VIEW IS CALLED, WE SHOULD
+            # REMOVE THE CSRF_TOKEN FROM THE DEVICE_TOKENS TABLE. THIS IS TO PREVENT
+            # TOKEN LEAKAGE AND POSSIBLE TOKEN REUSE.
+            #
+            # FOR NOW, THIS APPROACH IS TEMPORARY UNTIL JWT AND FCM IS INTEGRATED
+            # IN THIS PROJECT.
+            # initial_insert_sql = "INSERT INTO `%s` (" % tableName
+            sql_writeToken = 'INSERT INTO `device_tokens` (`token`, `created_at`) VALUES (`%s`, `%s`)' % getAToken, timeNow
+            with connection.cursor() as cursor:
+                try:
+                    cursor.execute(sql_writeToken)
+                    status = 'OK'
+                    token = getAToken
+                except Exception as ex:
+                    error = 0
+                    status = ex
+
         except Exception as ex:
             error = 1
             status = ex
