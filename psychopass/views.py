@@ -657,6 +657,48 @@ def coeReact(request):
         return HttpResponse('I see you wanna react to the COE Toothbrush.')
 
 @csrf_exempt
+def createApiTable(request):
+    error = 0
+    status = ''
+
+    if request.method == 'GET':
+        return HttpResponse('Hey, an unfamiliar face. What brings you here?')
+    else:
+        # tableName = request.POST.get('tableName')
+        # fields = json.loads(request.POST.get('formData'))
+        tableName = request.POST.get('tblName')
+        tableCols = json.loads(request.POST.get('tblCols'))
+
+        sql_createTable = "CREATE TABLE '%s' ('rowId' INTEGER PRIMARY KEY);" % tableName
+        with connection.cursor() as cursor:
+            try:
+                cursor.execute(sql_createTable)
+
+                try:
+                    sql_alterTable = "ALTER TABLE '%s' ADD" % tableName
+                    for obj in tableCols:
+                        object = "'%s' varchar(50);" % obj
+
+                        if object != '':
+                            sql_adjusted = ' '.join([sql_alterTable, object])
+                            cursor.execute(sql_adjusted)
+
+                    error = 0
+                    status = 'OK'
+                except Exception as ex:
+                    error = 1
+                    status = ex
+
+            except Exception as ex:
+                error = 1
+                status = ex
+
+        return JsonResponse({
+        'error': error,
+        'status': status
+        }, safe=False)
+
+@csrf_exempt
 def getToken(request):
     error = 0
     status = ''
@@ -664,7 +706,7 @@ def getToken(request):
 
     if request.method == 'GET':
         try:
-            getAToken = csrf.get_token()
+            getAToken = csrf.get_token(request)
             status = 'OK'
             token = getAToken
         except Exception as ex:
