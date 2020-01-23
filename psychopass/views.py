@@ -848,7 +848,7 @@ def logout(request):
 
         # Match the token given by the logout request, then remove it from the table.
         with connection.cursor() as cursor:
-            sql_getToken = 'SELECT `token` FROM `device_tokens` WHERE `token` == "%s"' %s myToken
+            sql_getToken = 'SELECT `token` FROM `device_tokens` WHERE `token` == "%s"' % myToken
             try:
                 cursor.execute(sql_getToken)
                 token = cursor.fetchall()
