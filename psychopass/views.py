@@ -763,9 +763,13 @@ def getAuth(request):
                 cursor.execute(sql_validateToken)
                 if sql_validateToken:
                     myToken = cursor.fetchall()
-                    error = 0
-                    status = 'Authorized'
-                    data = {'token': myToken[0]}
+                    if len(myToken) > 0:
+                        error = 0
+                        status = 'Authorized'
+                        data = {'token': myToken[0]}
+                    else:
+                        error = 1
+                        status = 'Invalid token'
                 else:
                     error = 1
                     status = 'Invalid token'
