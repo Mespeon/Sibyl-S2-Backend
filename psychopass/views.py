@@ -877,3 +877,49 @@ def logout(request):
     'status': status,
     'data': data
     }, safe=False)
+
+@csrf_exempt
+def listing(request):
+    error = -1
+    status = 'Undetermined'
+    data = {}
+
+    if request.method == 'GET':
+        responseData = []
+        responseMessage = ''
+
+        #Get all parameters passed to the API.
+        paramsReceived = request.GET.dict()
+        print(paramsReceived)
+
+        # 'paramsReceived': responseData,
+        # 'message': responseMessage
+        # Check if there are parameters passed,
+        # then return a corresponding value.
+        if len(paramsReceived) > 0:
+            error = 0
+            data['params'] = paramsReceived
+            status = 'There are %d parameters received.' % len(paramsReceived)
+        else:
+            error = 0
+            status = 'There are %d parameters received.' % len(paramsReceived)
+
+        return response = JsonResponse({
+        'error': error,
+        'status': status,
+        'data': data
+        }, safe=False)
+
+    else:
+        return HttpResponse('You posted this request, didn\'t you?')
+
+@csrf_exempt
+def authlisting(request):
+    error = -1
+    status = 'Undetermined'
+    data = {}
+
+    if request.method == 'POST':
+        pass
+    else:
+        return HttpResponse('OH, YOU\'RE APPROACHING ME?!')

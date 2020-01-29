@@ -32,5 +32,7 @@ urlpatterns = [
     path(r'api/auth', views.getAuth, name='getAuth'),
     path(r'api/login', views.login, name='login'),
     path(r'api/register', views.register, name='register'),
-    path(r'api/logout', views.logout, name='logout')
+    path(r'api/logout', views.logout, name='logout'),
+    path(r'api/listing', views.listing, name='listing'),
+    path(r'api/authlisting', views.authlisting, name='authlisting')
 ]
