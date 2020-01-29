@@ -161,3 +161,7 @@ def preparePayload():
 	]
 	payload = {'Muse': muse, 'Aqours': aqours}
 	return payload
+
+def prepareTulflixThumbs():
+	payload = []
+	return payload

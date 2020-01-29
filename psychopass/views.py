@@ -885,7 +885,6 @@ def listing(request):
     data = {}
 
     if request.method == 'GET':
-        responseData = []
         responseMessage = ''
 
         #Get all parameters passed to the API.
@@ -904,7 +903,7 @@ def listing(request):
             error = 0
             status = 'There are %d parameters received.' % len(paramsReceived)
 
-        return response = JsonResponse({
+        return JsonResponse({
         'error': error,
         'status': status,
         'data': data
@@ -920,6 +919,13 @@ def authlisting(request):
     data = {}
 
     if request.method == 'POST':
-        pass
+        error = 0
+        status = 'OK'
+        
+        return JsonResponse({
+        'error': error,
+        'status': status,
+        'data': data
+        })
     else:
         return HttpResponse('OH, YOU\'RE APPROACHING ME?!')
