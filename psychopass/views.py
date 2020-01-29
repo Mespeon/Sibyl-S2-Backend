@@ -921,11 +921,11 @@ def authlisting(request):
     if request.method == 'POST':
         error = 0
         status = 'OK'
-        
+
         return JsonResponse({
         'error': error,
         'status': status,
         'data': data
-        })
+        }, safe=False)
     else:
         return HttpResponse('OH, YOU\'RE APPROACHING ME?!')
