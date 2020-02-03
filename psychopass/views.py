@@ -20,7 +20,6 @@ from . import lexAnalysis as lex
 from . import sibyl
 from . import randomizer
 from . import stargazer as strg
-# from . import senpai
 
 def index(request):
     return HttpResponse('You have reached Sibyl.')
