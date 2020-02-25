@@ -27,12 +27,12 @@ urlpatterns = [
     path(r'coe/react', views.coeReact, name='coeReact'),
 
     #For Sibyl API's Flutter app integrations
-    path(r'api/create', views.createApiTable, name='createApiTable'),
-    path(r'api/token', views.getToken, name='getToken'),
-    path(r'api/auth', views.getAuth, name='getAuth'),
-    path(r'api/login', views.login, name='login'),
-    path(r'api/register', views.register, name='register'),
-    path(r'api/logout', views.logout, name='logout'),
-    path(r'api/listing', views.listing, name='listing'),
-    path(r'api/authlisting', views.authlisting, name='authlisting')
+#     path(r'api/create', views.createApiTable, name='createApiTable'),
+#     path(r'api/token', views.getToken, name='getToken'),
+#     path(r'api/auth', views.getAuth, name='getAuth'),
+#     path(r'api/login', views.login, name='login'),
+#     path(r'api/register', views.register, name='register'),
+#     path(r'api/logout', views.logout, name='logout'),
+#     path(r'api/listing', views.listing, name='listing'),
+#     path(r'api/authlisting', views.authlisting, name='authlisting')
 ]
