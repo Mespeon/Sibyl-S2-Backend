@@ -929,3 +929,27 @@ def authlisting(request):
         }, safe=False)
     else:
         return HttpResponse('OH, YOU\'RE APPROACHING ME?!')
+
+@csrf_exempt
+def ultraEquipment(request):
+	error = -1
+	status = 'Undetermined'
+	data = {}
+	
+	if request.method == 'POST':
+		error = 0
+		status = 'OK - POST'
+		
+		return JsonResponse({
+		'error': error,
+		'status': status,
+		'data': data
+		}, safe=False)
+	else:
+		error = 0
+		status = 'OK - GET'
+		return JsonResponse({
+		'error': error,
+		'status': status,
+		'data': data
+		}, safe=False)
