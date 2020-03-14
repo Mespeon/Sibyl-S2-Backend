@@ -937,8 +937,15 @@ def ultraEquipment(request):
     data = []
 
     if request.method == 'POST':
+        # This will only work if the request has a Content-Type of 'application/json'
+        # and the form body is JSON.stringified. Otherwise, it may fail on other Content-Types.
+        form = json.loads(request.body.decode())
+        table = form['equipment']
+        className = form['class']
+
+        data = {'table': table, 'class': className}
         error = 0
-        status = 'OK - POST'
+        status = 'OK'
     else:
         with connection.cursor() as cursor:
             query = 'SELECT * FROM ultra_equipment'
@@ -957,8 +964,9 @@ def ultraEquipment(request):
                         data.append(itemObj)
 
                     error = 0
+                    status = 'OK'
                 else:
-                    status = 'No data found'
+                    status = 'OK - no data found'
                     error = 0
             except Exception as ex:
                 error = 1
