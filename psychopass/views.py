@@ -1018,8 +1018,6 @@ def ultraAddEquipment(request):
                 cursor.execute(queryGetId)
                 id = cursor.fetchall();
                 lastId = len(id) + 1
-                print('ID:' + id)
-                print('Last ID: ' + lastId)
                 queryPost = 'INSERT INTO `%s` (`equipId`, `class`, `name`, `description`) VALUES ("%s", "%s", "%s", "%s")' % (tableName, lastId, className, name, desc)
                 try:
                     cursor.execute(queryPost)
@@ -1035,15 +1033,6 @@ def ultraAddEquipment(request):
                 except Exception as ex:
                     error = 1
                     status = ex
-                #
-                # error = 0
-                # status = 'OK'
-                # data = {
-                # 'table': tableName,
-                # 'name': name,
-                # 'class': className,
-                # 'description': desc
-                # }
             except Exception as ex:
                 error = 1
                 status = ex
