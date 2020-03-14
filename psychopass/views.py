@@ -997,3 +997,42 @@ def ultraEquipment(request):
     'status': status,
     'data': data
     }, safe=False)
+
+@csrf_exempt
+def ultraAddEquipment(request):
+    error = -1
+    status = ''
+    data = []
+
+    if request.method == 'POST':
+        form = json.loads(request.body.decode())
+        table = form['table']
+        name = form['name']
+        className = form['class']
+        desc = form['description']
+
+        with connection.cursor() as cursor:
+            tableName = 'ultra_%s' % table
+            query = 'INSERT INTO `%s` (`class`, `name`, `description`) VALUES ("%s", "%s", "%s")' % (tableName, className, name, desc)
+            try:
+                cursor.execute(query)
+                error = 0
+                status = 'OK'
+                data = {
+                'table': tableName,
+                'name': name,
+                'class': className,
+                'description': desc
+                }
+            except Exception as ex:
+                error = 1
+                status = ex
+    else:
+        error = 1
+        status = 'You are not supposed to be here.'
+
+    return JsonResponse({
+    'error': error,
+    'status': status,
+    'data': data
+    })

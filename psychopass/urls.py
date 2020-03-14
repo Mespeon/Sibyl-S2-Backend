@@ -35,7 +35,8 @@ urlpatterns = [
 #     path(r'api/logout', views.logout, name='logout'),
 #     path(r'api/listing', views.listing, name='listing'),
 #     path(r'api/authlisting', views.authlisting, name='authlisting'),
-    
+
     #For Ultrashape
     path(r'ultra/equipment', views.ultraEquipment, name='ultraEquipment'),
+    path(r'ultra/equipment/add', views.ultraAddEquipment, name='ultraAddEquipment'),
 ]
