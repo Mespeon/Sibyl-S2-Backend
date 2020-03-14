@@ -952,10 +952,10 @@ def ultraEquipment(request):
                         'id': item[0],
                         'class': item[1],
                         'name': item[2],
-                        'description': item[4]
+                        'description': item[3]
                         }
                         data.append(itemObj)
-                        
+
                     error = 0
                 else:
                     status = 'No data found'
