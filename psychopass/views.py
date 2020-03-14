@@ -934,7 +934,7 @@ def authlisting(request):
 def ultraEquipment(request):
     error = -1
     status = ''
-    data = {}
+    data = []
 
     if request.method == 'POST':
         error = 0
@@ -947,7 +947,15 @@ def ultraEquipment(request):
                 equipment = cursor.fetchall()
 
                 if (len(equipment) > 0):
-                    data = equipment
+                    for item in equipment:
+                        itemObj = {
+                        'id': item[0],
+                        'class': item[1],
+                        'name': item[2],
+                        'description': item[4]
+                        }
+                        data.append(itemObj)
+                        
                     error = 0
                 else:
                     status = 'No data found'
