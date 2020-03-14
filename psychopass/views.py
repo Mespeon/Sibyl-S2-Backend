@@ -940,12 +940,32 @@ def ultraEquipment(request):
         # This will only work if the request has a Content-Type of 'application/json'
         # and the form body is JSON.stringified. Otherwise, it may fail on other Content-Types.
         form = json.loads(request.body.decode())
-        table = form['equipment']
-        className = form['class']
+        col = form['part']
 
-        data = {'table': table, 'class': className}
-        error = 0
-        status = 'OK'
+        with connection.cursor() as cursor:
+            query = "SELECT * FROM ultra_equipment WHERE `class` == '%s'" % col
+            try:
+                cursor.execute(query)
+                equipmentSpecific = cursor.fetchall()
+
+                if (len(equipmentSpecific) > 0):
+                    for item in equipmentSpecific:
+                        itemObj = {
+                        'id': item[0],
+                        'class': item[1],
+                        'name': item[2],
+                        'description': item[3]
+                        }
+                        data.append(itemObj)
+
+                    error = 0
+                    status = 'OK'
+                else:
+                    status = 'OK - no data found'
+                    error = 0
+            except Exception as ex:
+                status = ex
+                error = 1
     else:
         with connection.cursor() as cursor:
             query = 'SELECT * FROM ultra_equipment'
