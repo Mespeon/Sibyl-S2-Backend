@@ -932,37 +932,32 @@ def authlisting(request):
 
 @csrf_exempt
 def ultraEquipment(request):
-	error = -1
-	status = 'Undetermined'
-	data = {}
+    error = -1
+    status = ''
+    data = {}
 
-	if request.method == 'POST':
-		error = 0
-		status = 'OK - POST'
-
-		return JsonResponse({
-		'error': error,
-		'status': status,
-		'data': data
-		}, safe=False)
-	else:
-		with connection.cursor() as cursor:
-            sql_getToken = 'SELECT * FROM `ultra_equipment`'
+    if request.method == 'POST':
+        error = 0
+        status = 'OK - POST'
+    else:
+        with connection.cursor() as cursor:
+            query = 'SELECT * FROM ultra_equipment'
             try:
-                cursor.execute(sql_getToken)
+                cursor.execute(query)
                 equipment = cursor.fetchall()
 
-                if len(equipment) > 0:
+                if (len(equipment) > 0):
                     data = equipment
+                    error = 0
                 else:
-                    error = 1
                     status = 'No data found'
+                    error = 0
             except Exception as ex:
                 error = 1
                 status = ex
 
-		return JsonResponse({
-		'error': error,
-		'status': status,
-		'data': data
-		}, safe=False)
+    return JsonResponse({
+    'error': error,
+    'status': status,
+    'data': data
+    }, safe=False)
