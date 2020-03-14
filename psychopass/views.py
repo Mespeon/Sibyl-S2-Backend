@@ -1012,18 +1012,36 @@ def ultraAddEquipment(request):
         desc = form['description']
 
         with connection.cursor() as cursor:
+            lastId = 0
             tableName = 'ultra_%s' % table
-            query = 'INSERT INTO `%s` (`equipId`, `class`, `name`, `description`) VALUES ("1", "%s", "%s", "%s")' % (tableName, className, name, desc)
+            queryGetId = 'SELECT * FROM `%s`' % tableName
+            queryPost = 'INSERT INTO `%s` (`equipId`, `class`, `name`, `description`) VALUES ("%s", "%s", "%s", "%s")' % (tableName, lastId, className, name, desc)
             try:
-                cursor.execute(query)
-                error = 0
-                status = 'OK'
-                data = {
-                'table': tableName,
-                'name': name,
-                'class': className,
-                'description': desc
-                }
+                cursor.execute(queryGetId)
+                id = cursor.fetchall();
+                lastId = len(id) + 1
+                try:
+                    cursor.execute(queryPost)
+                    error = 0
+                    status = 'OK'
+                    data = {
+                    'table': tableName,
+                    'name': name,
+                    'class': className,
+                    'description': desc
+                    }
+                except Exception as ex:
+                    error = 1
+                    status = ex
+                #
+                # error = 0
+                # status = 'OK'
+                # data = {
+                # 'table': tableName,
+                # 'name': name,
+                # 'class': className,
+                # 'description': desc
+                # }
             except Exception as ex:
                 error = 1
                 status = ex
