@@ -1013,7 +1013,7 @@ def ultraAddEquipment(request):
 
         with connection.cursor() as cursor:
             tableName = 'ultra_%s' % table
-            query = 'INSERT INTO `%s` (`class`, `name`, `description`) VALUES ("%s", "%s", "%s")' % (tableName, className, name, desc)
+            query = 'INSERT INTO `%s` (`equipId`, `class`, `name`, `description`) VALUES ("1", "%s", "%s", "%s")' % (tableName, className, name, desc)
             try:
                 cursor.execute(query)
                 error = 0
