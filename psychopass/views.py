@@ -1012,14 +1012,15 @@ def ultraAddEquipment(request):
         desc = form['description']
 
         with connection.cursor() as cursor:
-            lastId = 0
             tableName = 'ultra_%s' % table
             queryGetId = 'SELECT * FROM `%s`' % tableName
-            queryPost = 'INSERT INTO `%s` (`equipId`, `class`, `name`, `description`) VALUES ("%s", "%s", "%s", "%s")' % (tableName, lastId, className, name, desc)
             try:
                 cursor.execute(queryGetId)
                 id = cursor.fetchall();
                 lastId = len(id) + 1
+                print('ID:' + id)
+                print('Last ID: ' + lastId)
+                queryPost = 'INSERT INTO `%s` (`equipId`, `class`, `name`, `description`) VALUES ("%s", "%s", "%s", "%s")' % (tableName, lastId, className, name, desc)
                 try:
                     cursor.execute(queryPost)
                     error = 0
