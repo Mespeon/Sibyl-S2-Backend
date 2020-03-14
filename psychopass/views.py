@@ -935,19 +935,32 @@ def ultraEquipment(request):
 	error = -1
 	status = 'Undetermined'
 	data = {}
-	
+
 	if request.method == 'POST':
 		error = 0
 		status = 'OK - POST'
-		
+
 		return JsonResponse({
 		'error': error,
 		'status': status,
 		'data': data
 		}, safe=False)
 	else:
-		error = 0
-		status = 'OK - GET'
+		with connection.cursor() as cursor:
+            sql_getToken = 'SELECT * FROM `ultra_equipment`'
+            try:
+                cursor.execute(sql_getToken)
+                equipment = cursor.fetchall()
+
+                if len(equipment) > 0:
+                    data = equipment
+                else:
+                    error = 1
+                    status = 'No data found'
+            except Exception as ex:
+                error = 1
+                status = ex
+
 		return JsonResponse({
 		'error': error,
 		'status': status,
