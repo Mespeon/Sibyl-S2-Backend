@@ -1025,12 +1025,13 @@ def ultraAddEquipment(request):
                     cursor.execute(queryPost)
                     error = 0
                     status = 'OK'
-                    data = {
+                    dataObj = {
                     'table': tableName,
                     'name': name,
                     'class': className,
                     'description': desc
                     }
+                    data.append(dataObj)
                 except Exception as ex:
                     error = 1
                     status = ex
