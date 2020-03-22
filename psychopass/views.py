@@ -1142,7 +1142,7 @@ def ultraAddFood(request):
                 cursor.execute(queryGetId)
                 id = cursor.fetchall();
                 lastId = len(id) + 1
-                queryPost = 'INSERT INTO `%s` (`foodId`, `class`, `name`, `description`) VALUES ("%s", "%s", "%s", "%s")' % (tableName, lastId, className, name, desc)
+                queryPost = 'INSERT INTO `%s` (`foodId`, `name`, `class`, `description`) VALUES ("%s", "%s", "%s", "%s")' % (tableName, lastId, name, className, desc)
                 try:
                     cursor.execute(queryPost)
                     error = 0
