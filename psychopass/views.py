@@ -1048,7 +1048,32 @@ def ultraAddEquipment(request):
 
 @csrf_exempt
 def ultraDeleteEquipment(request):
-    pass
+    error = -1
+    status = ''
+    data = []
+
+    if request.method == 'POST':
+        form = json.loads(request.body.decode())
+        id = form['id']
+
+        with connection.cursor() as cursor:
+            query = "DELETE FROM ultra_equipment WHERE equipId == `%s`" % id
+            try:
+                cursor.execute(query)
+                error = 0
+                status = 'Deleted'
+                data = {
+                'id': id
+                }
+            except Exception as ex:
+                error = 1
+                status = ex
+
+    return JsonResponse({
+    'error': error,
+    'status': status,
+    'data': data
+    }, safe=False)
 
 @csrf_exempt
 def ultraUpdateEquipment(request):
@@ -1169,3 +1194,32 @@ def ultraAddFood(request):
     'status': status,
     'data': data
     })
+
+@csrf_exempt
+def ultraDeleteFood(request):
+    error = -1
+    status = ''
+    data = []
+
+    if request.method == 'POST':
+        form = json.loads(request.body.decode())
+        id = form['id']
+
+        with connection.cursor() as cursor:
+            query = "DELETE FROM ultra_food WHERE foodId == `%s`" % id
+            try:
+                cursor.execute(query)
+                error = 0
+                status = 'Deleted'
+                data = {
+                'id': id
+                }
+            except Exception as ex:
+                error = 1
+                status = ex
+
+    return JsonResponse({
+    'error': error,
+    'status': status,
+    'data': data
+    }, safe=False)
