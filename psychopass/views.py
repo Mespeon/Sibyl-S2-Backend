@@ -1101,8 +1101,8 @@ def ultraFood(request):
                     for item in equipment:
                         itemObj = {
                         'id': item[0],
-                        'class': item[1],
-                        'name': item[2],
+                        'class': item[2],
+                        'name': item[1],
                         'description': item[3]
                         }
                         data.append(itemObj)
