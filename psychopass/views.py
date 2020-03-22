@@ -1211,9 +1211,6 @@ def ultraDeleteFood(request):
                 cursor.execute(query)
                 error = 0
                 status = 'Deleted'
-                data = {
-                'id': id
-                }
             except Exception as ex:
                 error = 1
                 status = ex
