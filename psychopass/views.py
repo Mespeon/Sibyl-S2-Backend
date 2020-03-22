@@ -1067,7 +1067,7 @@ def ultraFood(request):
         col = form['food']
 
         with connection.cursor() as cursor:
-            query = "SELECT * FROM ultra_food WHERE `class` == '%s'" % col
+            query = "SELECT * FROM ultra_food WHERE `name` LIKE '\%%s\%'" % col
             try:
                 cursor.execute(query)
                 equipmentSpecific = cursor.fetchall()
