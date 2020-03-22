@@ -1045,3 +1045,127 @@ def ultraAddEquipment(request):
     'status': status,
     'data': data
     })
+
+@csrf_exempt
+def ultraDeleteEquipment(request):
+    pass
+
+@csrf_exempt
+def ultraUpdateEquipment(request):
+    pass
+
+@csrf_exempt
+def ultraFood(request):
+    error = -1
+    status = ''
+    data = []
+
+    if request.method == 'POST':
+        # This will only work if the request has a Content-Type of 'application/json'
+        # and the form body is JSON.stringified. Otherwise, it may fail on other Content-Types.
+        form = json.loads(request.body.decode())
+        col = form['food']
+
+        with connection.cursor() as cursor:
+            query = "SELECT * FROM ultra_food WHERE `class` == '%s'" % col
+            try:
+                cursor.execute(query)
+                equipmentSpecific = cursor.fetchall()
+
+                if (len(equipmentSpecific) > 0):
+                    for item in equipmentSpecific:
+                        itemObj = {
+                        'id': item[0],
+                        'class': item[1],
+                        'name': item[2],
+                        'description': item[3]
+                        }
+                        data.append(itemObj)
+
+                    error = 0
+                    status = 'OK'
+                else:
+                    status = 'OK - no data found'
+                    error = 0
+            except Exception as ex:
+                status = ex
+                error = 1
+    else:
+        with connection.cursor() as cursor:
+            query = 'SELECT * FROM ultra_food'
+            try:
+                cursor.execute(query)
+                equipment = cursor.fetchall()
+
+                if (len(equipment) > 0):
+                    for item in equipment:
+                        itemObj = {
+                        'id': item[0],
+                        'class': item[1],
+                        'name': item[2],
+                        'description': item[3]
+                        }
+                        data.append(itemObj)
+
+                    error = 0
+                    status = 'OK'
+                else:
+                    status = 'OK - no data found'
+                    error = 0
+            except Exception as ex:
+                error = 1
+                status = ex
+
+    return JsonResponse({
+    'error': error,
+    'status': status,
+    'data': data
+    }, safe=False)
+
+@csrf_exempt
+def ultraAddFood(request):
+    error = -1
+    status = ''
+    data = []
+
+    if request.method == 'POST':
+        form = json.loads(request.body.decode())
+        table = form['table']
+        name = form['name']
+        className = form['class']
+        desc = form['description']
+
+        with connection.cursor() as cursor:
+            tableName = 'ultra_%s' % table
+            queryGetId = 'SELECT * FROM `%s`' % tableName
+            try:
+                cursor.execute(queryGetId)
+                id = cursor.fetchall();
+                lastId = len(id) + 1
+                queryPost = 'INSERT INTO `%s` (`foodId`, `class`, `name`, `description`) VALUES ("%s", "%s", "%s", "%s")' % (tableName, lastId, className, name, desc)
+                try:
+                    cursor.execute(queryPost)
+                    error = 0
+                    status = 'OK'
+                    dataObj = {
+                    'table': tableName,
+                    'name': name,
+                    'class': className,
+                    'description': desc
+                    }
+                    data.append(dataObj)
+                except Exception as ex:
+                    error = 1
+                    status = ex
+            except Exception as ex:
+                error = 1
+                status = ex
+    else:
+        error = 1
+        status = 'You are not supposed to be here.'
+
+    return JsonResponse({
+    'error': error,
+    'status': status,
+    'data': data
+    })
