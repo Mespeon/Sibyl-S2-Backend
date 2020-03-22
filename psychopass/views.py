@@ -1057,7 +1057,7 @@ def ultraDeleteEquipment(request):
         id = form['id']
 
         with connection.cursor() as cursor:
-            query = "DELETE FROM ultra_equipment WHERE equipId == `%s`" % id
+            query = "DELETE FROM ultra_equipment WHERE `equipId` == `%s`" % id
             try:
                 cursor.execute(query)
                 error = 0
@@ -1206,7 +1206,7 @@ def ultraDeleteFood(request):
         id = form['id']
 
         with connection.cursor() as cursor:
-            query = "DELETE FROM ultra_food WHERE foodId == `%s`" % id
+            query = "DELETE FROM ultra_food WHERE `foodId` == `%s`" % id
             try:
                 cursor.execute(query)
                 error = 0
