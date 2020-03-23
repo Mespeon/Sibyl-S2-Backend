@@ -1217,3 +1217,39 @@ def ultraDeleteFood(request):
     'status': status,
     'data': data
     }, safe=False)
+
+@csrf_exempt
+def ultraUpdateFood(request):
+    error = -1
+    status = ''
+    data = []
+
+    if request.method == 'POST':
+        form = json.loads(request.body.decode())
+        id = form['id']
+
+        with connection.cursor() as cursor:
+            query = "SELECT * FROM ultra_food WHERE `foodId` = '%s'" % id
+            try:
+                cursor.execute(query)
+                row = cursor.fetchall()
+                if len(row) != 0:
+                    updateTable = "UPDATE ultra_food"
+                    values = "SET `name` = '%s', `class` = '%s', `description` = '%s'" % (form['name'], form['class'], form['description'])
+                    cond = "WHERE `foodId` = '%s'" % id
+                    updateRow = ' '.join([updateTable, values, cond])
+
+                    try:
+                        cursor.execute(updateRow)
+                    except Exception as ex:
+                        error = 1
+                        status = ex
+            except Exception as ex:
+                error = 1
+                status = ex
+
+        return JsonResponse({
+        'error': error,
+        'status': status,
+        'data': data
+        }, safe=False)
