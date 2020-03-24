@@ -1241,6 +1241,8 @@ def ultraUpdateFood(request):
 
                     try:
                         cursor.execute(updateRow)
+                        error = 0
+                        status = 'Updated'
                     except Exception as ex:
                         error = 1
                         status = ex
@@ -1248,8 +1250,8 @@ def ultraUpdateFood(request):
                 error = 1
                 status = ex
 
-    return JsonResponse({
-    'error': error,
-    'status': status,
-    'data': data
-    }, safe=False)
+        return JsonResponse({
+        'error': error,
+        'status': status,
+        'data': data
+        }, safe=False)
