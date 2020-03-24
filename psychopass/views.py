@@ -747,7 +747,7 @@ def getToken(request):
 @csrf_exempt
 def getAuth(request):
     # If error is still set at -1, it means this function failed to do its thing.
-    error = -1
+    error = 1
     status = 'Unauthorized'
     data = {}
 
@@ -787,7 +787,7 @@ def getAuth(request):
 
 @csrf_exempt
 def register(request):
-    error = -1
+    error = 1
     status = 'Undetermined'
     data = {}
 
@@ -810,7 +810,7 @@ def register(request):
 
 @csrf_exempt
 def login(request):
-    error = -1
+    error = 1
     status = 'Undetermined'
     data = {}
 
@@ -838,7 +838,7 @@ def login(request):
 
 @csrf_exempt
 def logout(request):
-    error = -1
+    error = 1
     status = 'Undetermined'
     data = {}
 
@@ -880,7 +880,7 @@ def logout(request):
 
 @csrf_exempt
 def listing(request):
-    error = -1
+    error = 1
     status = 'Undetermined'
     data = {}
 
@@ -914,7 +914,7 @@ def listing(request):
 
 @csrf_exempt
 def authlisting(request):
-    error = -1
+    error = 1
     status = 'Undetermined'
     data = {}
 
@@ -932,7 +932,7 @@ def authlisting(request):
 
 @csrf_exempt
 def ultraEquipment(request):
-    error = -1
+    error = 1
     status = ''
     data = []
 
@@ -1000,7 +1000,7 @@ def ultraEquipment(request):
 
 @csrf_exempt
 def ultraAddEquipment(request):
-    error = -1
+    error = 1
     status = ''
     data = []
 
@@ -1048,7 +1048,7 @@ def ultraAddEquipment(request):
 
 @csrf_exempt
 def ultraDeleteEquipment(request):
-    error = -1
+    error = 1
     status = ''
     data = []
 
@@ -1074,11 +1074,45 @@ def ultraDeleteEquipment(request):
 
 @csrf_exempt
 def ultraUpdateEquipment(request):
-    pass
+    error = 1
+    status = ''
+    data = []
+
+    if request.method == 'POST':
+        form = json.loads(request.body.decode())
+        id = form['id']
+
+        with connection.cursor() as cursor:
+            query = "SELECT * FROM ultra_equipment WHERE `equipId` = '%s'" % id
+            try:
+                cursor.execute(query)
+                row = cursor.fetchall()
+                if len(row) != 0:
+                    updateTable = "UPDATE ultra_equipment"
+                    values = "SET `name` = '%s', `class` = '%s', `description` = '%s'" % (form['name'], form['class'], form['description'])
+                    cond = "WHERE `equipId` = '%s'" % id
+                    updateRow = ' '.join([updateTable, values, cond])
+
+                    try:
+                        cursor.execute(updateRow)
+                        error = 0
+                        status = 'Updated'
+                    except Exception as ex:
+                        status = ex
+                else:
+                    status = 'No item found at ID.'
+            except Exception as ex:
+                status = ex
+
+    return JsonResponse({
+    'error': error,
+    'status': status,
+    'data': data
+    }, safe=False)
 
 @csrf_exempt
 def ultraFood(request):
-    error = -1
+    error = 1
     status = ''
     data = []
 
@@ -1146,7 +1180,7 @@ def ultraFood(request):
 
 @csrf_exempt
 def ultraAddFood(request):
-    error = -1
+    error = 1
     status = ''
     data = []
 
@@ -1194,7 +1228,7 @@ def ultraAddFood(request):
 
 @csrf_exempt
 def ultraDeleteFood(request):
-    error = -1
+    error = 1
     status = ''
     data = []
 
@@ -1220,7 +1254,7 @@ def ultraDeleteFood(request):
 
 @csrf_exempt
 def ultraUpdateFood(request):
-    error = -1
+    error = 1
     status = ''
     data = []
 
