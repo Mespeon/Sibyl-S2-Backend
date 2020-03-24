@@ -1250,8 +1250,8 @@ def ultraUpdateFood(request):
                 error = 1
                 status = ex
 
-        return JsonResponse({
-        'error': error,
-        'status': status,
-        'data': data
-        }, safe=False)
+    return JsonResponse({
+    'error': error,
+    'status': status,
+    'data': data
+    }, safe=False)
