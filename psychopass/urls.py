@@ -35,15 +35,4 @@ urlpatterns = [
 #     path(r'api/logout', views.logout, name='logout'),
 #     path(r'api/listing', views.listing, name='listing'),
 #     path(r'api/authlisting', views.authlisting, name='authlisting'),
-
-    #For Ultrashape
-    path(r'ultra/equipment', views.ultraEquipment, name='ultraEquipment'),
-    path(r'ultra/equipment/add', views.ultraAddEquipment, name='ultraAddEquipment'),
-    path(r'ultra/equipment/delete', views.ultraDeleteEquipment, name='ultraDeleteEquipment'),
-    path(r'ultra/equipment/update', views.ultraUpdateEquipment, name='ultraUpdateEquipment'),
-
-    path(r'ultra/food', views.ultraFood, name='ultraFood'),
-    path(r'ultra/food/add', views.ultraAddFood, name='ultraAddFood'),
-    path(r'ultra/food/delete', views.ultraDeleteFood, name='ultraDeleteFood'),
-    path(r'ultra/food/update', views.ultraUpdateFood, name='ultraUpdateFood'),
 ]
