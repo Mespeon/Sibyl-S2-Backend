@@ -954,7 +954,9 @@ def ultraEquipment(request):
                         'id': item[0],
                         'class': item[1],
                         'name': item[2],
-                        'description': item[3]
+                        'description': item[3],
+                        'b64': item[4],
+                        'yt_link': item[5]
                         }
                         data.append(itemObj)
 
@@ -979,7 +981,9 @@ def ultraEquipment(request):
                         'id': item[0],
                         'class': item[1],
                         'name': item[2],
-                        'description': item[3]
+                        'description': item[3],
+                        'b64': item[4],
+                        'yt_link': item[5]
                         }
                         data.append(itemObj)
 
@@ -1010,6 +1014,8 @@ def ultraAddEquipment(request):
         name = form['name']
         className = form['class']
         desc = form['description']
+        b64 = form['b64']
+        ytlink = form['yt_link']
 
         with connection.cursor() as cursor:
             tableName = 'ultra_%s' % table
@@ -1018,7 +1024,7 @@ def ultraAddEquipment(request):
                 cursor.execute(queryGetId)
                 id = cursor.fetchall();
                 lastId = len(id) + 1
-                queryPost = 'INSERT INTO `%s` (`equipId`, `class`, `name`, `description`) VALUES ("%s", "%s", "%s", "%s")' % (tableName, lastId, className, name, desc)
+                queryPost = 'INSERT INTO `%s` (`equipId`, `class`, `name`, `description`, `b64`, `yt_link`) VALUES ("%s", "%s", "%s", "%s", "%s", "%s")' % (tableName, lastId, className, name, desc, b64, ytlink)
                 try:
                     cursor.execute(queryPost)
                     error = 0
@@ -1089,7 +1095,7 @@ def ultraUpdateEquipment(request):
                 row = cursor.fetchall()
                 if len(row) != 0:
                     updateTable = "UPDATE ultra_equipment"
-                    values = "SET `name` = '%s', `class` = '%s', `description` = '%s'" % (form['name'], form['class'], form['description'])
+                    values = "SET `name` = '%s', `class` = '%s', `description` = '%s', `b64` = '%s', `yt_link` = '%s'" % (form['name'], form['class'], form['description'], form['b64'], form['ytlink'])
                     cond = "WHERE `equipId` = '%s'" % id
                     updateRow = ' '.join([updateTable, values, cond])
 
@@ -1134,7 +1140,8 @@ def ultraFood(request):
                         'id': item[0],
                         'class': item[2],
                         'name': item[1],
-                        'description': item[3]
+                        'description': item[3],
+                        'b64': item[4]
                         }
                         data.append(itemObj)
 
@@ -1159,7 +1166,8 @@ def ultraFood(request):
                         'id': item[0],
                         'class': item[2],
                         'name': item[1],
-                        'description': item[3]
+                        'description': item[3],
+                        'b64': item[4]
                         }
                         data.append(itemObj)
 
@@ -1190,6 +1198,7 @@ def ultraAddFood(request):
         name = form['name']
         className = form['class']
         desc = form['description']
+        b64 = form['b64']
 
         with connection.cursor() as cursor:
             tableName = 'ultra_%s' % table
@@ -1198,7 +1207,7 @@ def ultraAddFood(request):
                 cursor.execute(queryGetId)
                 id = cursor.fetchall();
                 lastId = len(id) + 1
-                queryPost = 'INSERT INTO `%s` (`foodId`, `name`, `class`, `description`) VALUES ("%s", "%s", "%s", "%s")' % (tableName, lastId, name, className, desc)
+                queryPost = 'INSERT INTO `%s` (`foodId`, `name`, `class`, `description`, `b64`) VALUES ("%s", "%s", "%s", "%s", "%s")' % (tableName, lastId, name, className, desc, b64)
                 try:
                     cursor.execute(queryPost)
                     error = 0
@@ -1269,7 +1278,7 @@ def ultraUpdateFood(request):
                 row = cursor.fetchall()
                 if len(row) != 0:
                     updateTable = "UPDATE ultra_food"
-                    values = "SET `name` = '%s', `class` = '%s', `description` = '%s'" % (form['name'], form['class'], form['description'])
+                    values = "SET `name` = '%s', `class` = '%s', `description` = '%s', `b64` = '%s'" % (form['name'], form['class'], form['description'], form['b64'])
                     cond = "WHERE `foodId` = '%s'" % id
                     updateRow = ' '.join([updateTable, values, cond])
 
